@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trang Chủ - Thiền Sư Tịnh Quang</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     body {
       background: linear-gradient(to bottom right, #f0f4f8, #e2e8f0);
@@ -34,11 +34,36 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
-
-  <audio autoplay loop>
-    <source src="https://raw.githubusercontent.com/thiensutinhquang/home/main/chuong.mp3" type="audio/mp3" />
+  <audio id="bg-music" autoplay loop>
+    <source src="https://raw.githubusercontent.com/thiensutinhquang/home/main/chuong.mp3" type="audio/mp3">
     Trình duyệt của bạn không hỗ trợ âm thanh.
   </audio>
+  <script>
+    const music = document.getElementById('bg-music');
+    music.volume = 0;
+    const fadeIn = () => {
+      let vol = 0;
+      const interval = setInterval(() => {
+        if (vol < 0.5) {
+          vol += 0.02;
+          music.volume = vol;
+        } else {
+          clearInterval(interval);
+        }
+      }, 200);
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const playPromise = music.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          fadeIn();
+        }).catch((error) => {
+          console.log('Tự động phát bị chặn bởi trình duyệt:', error);
+        });
+      }
+    });
+  </script>
 
   <div class="max-w-5xl w-full">
     <header class="mb-10 text-center">
