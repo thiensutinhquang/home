@@ -7,8 +7,8 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <style>
     body {
-      background: linear-gradient(to bottom right, #f0f4f8, #e2e8f0);
-      color: #1a202c;
+      background: linear-gradient(135deg, #3a86ff, #8338ec);
+      color: #f0f0f0;
       position: relative;
       min-height: 100vh;
       overflow-x: hidden;
@@ -46,7 +46,6 @@
       opacity: 1;
       transform: scale(1);
     }
-    /* Hiệu ứng ánh sáng lan tỏa */
     .light-flare {
       position: relative;
       z-index: 1;
@@ -71,42 +70,41 @@
       opacity: 1;
     }
 
-    /* Sóng nước nền */
-    .wave-container {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 120px;
-      overflow: hidden;
+    /* Hiệu ứng mưa phùn nhẹ */
+    .rain-container {
       pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
       z-index: 0;
+      overflow: hidden;
     }
-    .wave {
+    .raindrop {
       position: absolute;
-      bottom: 0;
-      width: 200%;
-      height: 100%;
-      background: rgba(56, 178, 172, 0.3);
-      border-radius: 100% 50% 0 0 / 100% 100% 0 0;
-      animation: waveAnim 6s linear infinite;
+      top: -10px;
+      background: radial-gradient(circle, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.15) 80%);
+      border-radius: 50%;
+      filter: drop-shadow(0 0 2px #fff);
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-name: fall;
       opacity: 0.6;
     }
-    .wave:nth-child(2) {
-      background: rgba(56, 178, 172, 0.2);
-      animation-duration: 8s;
-      bottom: 10px;
-      opacity: 0.4;
-    }
-    @keyframes waveAnim {
+    /* Tạo hiệu ứng gió (dịch ngang nhẹ) */
+    @keyframes fall {
       0% {
-        transform: translateX(0) translateY(0);
+        transform: translateX(0) translateY(0) scaleX(0.5);
+        opacity: 1;
+        filter: drop-shadow(0 0 3px #fff);
       }
       50% {
-        transform: translateX(-25%) translateY(10px);
+        transform: translateX(calc(var(--wind) * 10px)) translateY(50vh) scaleX(1);
+        opacity: 0.8;
+        filter: drop-shadow(0 0 6px #ccf);
       }
       100% {
-        transform: translateX(-50%) translateY(0);
+        transform: translateX(calc(var(--wind) * 20px)) translateY(100vh) scaleX(0.7);
+        opacity: 0;
+        filter: drop-shadow(0 0 1px #88f);
       }
     }
   </style>
@@ -116,7 +114,7 @@
     <header class="mb-10 text-center">
       <h1 class="text-4xl font-bold mb-2">Thiền Sư Tịnh Quang</h1>
       <p class="text-lg mb-2">Chào mừng quý đạo hữu đến với khuôn viên tâm linh</p>
-      <blockquote id="quote" class="italic text-xl text-gray-700 quote-transition">“Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong”</blockquote>
+      <blockquote id="quote" class="italic text-xl text-white quote-transition">“Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong”</blockquote>
     </header>
 
     <!-- Khu vực nền tảng mạng xã hội -->
@@ -143,21 +141,47 @@
       </div>
     </section>
 
-    <footer class="mt-12 text-center text-sm text-gray-600">
+    <footer class="mt-12 text-center text-sm text-gray-300">
       &copy; 2025 Thiền Sư Tịnh Quang. Tất cả các quyền được bảo lưu.
     </footer>
   </div>
 
   <audio id="quoteSound" src="https://thiensutinhquang.github.io/home/chuong.mp3" preload="auto"></audio>
 
-  <!-- Sóng nước nền -->
-  <div class="wave-container" aria-hidden="true">
-    <div class="wave"></div>
-    <div class="wave"></div>
-  </div>
+  <!-- Hiệu ứng mưa phùn -->
+  <div class="rain-container" aria-hidden="true"></div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", () => {
+      // Tạo giọt mưa
+      const rainContainer = document.querySelector('.rain-container');
+      const dropsCount = 80;
+
+      for(let i = 0; i < dropsCount; i++) {
+        const drop = document.createElement('div');
+        drop.classList.add('raindrop');
+
+        // Kích thước giọt (rộng 1-3px, cao 3-10px)
+        const width = Math.random() * 2 + 1;
+        drop.style.width = width + 'px';
+        drop.style.height = (width * 4 + Math.random() * 6) + 'px';
+
+        // Vị trí ngang random 0-100vw
+        drop.style.left = Math.random() * 100 + 'vw';
+
+        // Thời gian rơi 4-7 giây
+        drop.style.animationDuration = (Math.random() * 3 + 4) + 's';
+
+        // Delay rơi ngẫu nhiên 0-7 giây
+        drop.style.animationDelay = Math.random() * 7 + 's';
+
+        // Biến CSS custom để điều khiển gió (giá trị từ -1 đến 1)
+        drop.style.setProperty('--wind', (Math.random() * 2 - 1).toFixed(2));
+
+        rainContainer.appendChild(drop);
+      }
+
+      // Quote + hiệu ứng
       const quotes = [
         "Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong",
         "Hãy biến hôm nay thành một ngày tuyệt vời nhé. Đừng quên hãy thường niệm. \"Mình là phật, mình thấy ai ai cũng là phật, như Đức Phật Thích Ca.\"",
@@ -169,7 +193,6 @@
         "Nhận thức được vị phật bên trong mình",
         "Minh sư đã đi qua hết rồi giờ quay lại chỉ rõ để không bị lạc"
       ];
-
       const quoteEl = document.getElementById("quote");
       const quoteSound = document.getElementById("quoteSound");
       if (!quoteEl) return;
