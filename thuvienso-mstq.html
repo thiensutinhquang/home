@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đang chuyển hướng đến PWA...</title>
+  <link rel="dns-prefetch" href="//thiensutinhquang.github.io">
+  <link rel="preconnect" href="https://thiensutinhquang.github.io">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    /* Custom Animations for Button and Box */
+    .gradient-button {
+      background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+      box-shadow: 0 5px 15px rgba(66, 133, 244, 0.4);
+    }
+    .gradient-button:hover {
+      box-shadow: 0 8px 20px rgba(66, 133, 244, 0.6);
+    }
+
+    /* Pulse effect for the main container */
+    @keyframes subtlePulse {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+      50% {
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.15), 0 6px 10px -3px rgba(0, 0, 0, 0.08);
+      }
+    }
+    .animate-subtle-pulse {
+      animation: subtlePulse 3s infinite ease-in-out;
+    }
+
+    /* Modal Transition */
+    .modal-enter-active, .modal-leave-active {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .modal-enter-from, .modal-leave-to {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .modal-enter-to, .modal-leave-from {
+      opacity: 1;
+      transform: scale(1);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center min-h-screen relative overflow-hidden text-gray-800">
+  <canvas id="backgroundCanvas" class="absolute inset-0 z-0"></canvas>
+
+  <div class="bg-white p-8 rounded-2xl shadow-xl text-center max-w-sm w-full mx-4 relative z-10 animate-subtle-pulse">
+    <div class="text-6xl mb-4" role="img" aria-label="Warning Icon">⚠️</div>
+    <h1 class="text-3xl font-extrabold mb-3 text-gray-800">Mở bằng trình duyệt mặc định</h1>
+    <p class="text-gray-700 mb-6 leading-relaxed">
+      Để có trải nghiệm tốt nhất và sử dụng đầy đủ các tính năng của ứng dụng, vui lòng nhấn nút bên dưới để tiếp tục.
+    </p>
+    <button id="openExternalBrowser" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 gradient-button relative overflow-hidden flex items-center justify-center">
+      <span id="buttonText">MỞ TRONG TRÌNH DUYỆT</span>
+      <span id="loadingSpinner" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-20 hidden">
+        <svg class="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </span>
+    </button>
+    <p class="text-gray-500 text-sm mt-4">Ứng dụng hoạt động tốt nhất trên Chrome, Safari, Firefox, Cốc Cốc...</p>
+  </div>
+
+  <div id="infoModalOverlay" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+    <div id="infoModalContent" class="bg-white rounded-2xl shadow-2xl p-7 max-w-md w-full text-center transition-all duration-300 modal-enter-from">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800">💡 Tại sao cần mở bằng trình duyệt?</h2>
+      <p class="text-gray-700 mb-5 text-left leading-relaxed">
+        Trang web này là một <strong class="text-blue-600">ứng dụng web tiến bộ (PWA)</strong> được tối ưu hóa cho trình duyệt.
+        Khi bạn mở liên kết này từ các ứng dụng mạng xã hội (như Zalo, Facebook, Messenger, Telegram...),
+        chúng thường sử dụng một trình duyệt nhúng có thể hạn chế hiệu suất hoặc một số tính năng.
+      </p>
+      <p class="text-gray-700 mb-6 text-left leading-relaxed font-semibold">
+        Để đảm bảo trải nghiệm đầy đủ, mượt mà và an toàn nhất, vui lòng nhấn nút "Mở trong trình duyệt" ở trang trước.
+      </p>
+      <button id="closeInfoModal" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+        Đã hiểu, đóng thông báo
+      </button>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    // === PHẦN QUAN TRỌNG: XỬ LÝ LINK ĐÍCH ===
+    // Đã cập nhật baseAppURL theo yêu cầu
+    const baseAppURL = 'https://thiensutinhquang.github.io/home/'; 
+    
+    const params = new URLSearchParams(window.location.search);
+    const videoId = params.get('v'); // Giữ lại để tương thích ngược nếu cần
+    const videoTime = params.get('t'); // Giữ lại để tương thích ngược nếu cần
+
+    let targetURL = baseAppURL;
+    // Bạn có thể tùy chỉnh logic này nếu muốn các tham số 'v' và 't' ảnh hưởng đến trang 'home'
+    // Ví dụ: nếu 'home' cũng có thể xử lý các tham số video
+    if (videoId) {
+      targetURL += `?v=${videoId}`;
+      if (videoTime) {
+        targetURL += `&t=${videoTime}`;
+      }
+    }
+    
+    // === PHẦN PHÁT HIỆN VÀ CHUYỂN HƯỚNG ===
+    const ua           = navigator.userAgent || '';
+    const isAndroid    = /Android/i.test(ua);
+    const isIOS        = /iPhone|iPad|iPod/i.test(ua);
+    const inAppKeywords = ['FBAV', 'FBAN', 'Zalo', 'Messenger', 'Telegram', 'Viber', 'Line', 'Snapchat', 'WeChat', 'Instagram'];
+    const isInApp       = inAppKeywords.some(keyword => ua.includes(keyword));
+
+    const openExternalBrowserButton = document.getElementById('openExternalBrowser');
+    const buttonText = document.getElementById('buttonText');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const infoModalOverlay = document.getElementById('infoModalOverlay');
+    const infoModalContent = document.getElementById('infoModalContent');
+    const closeInfoModalButton = document.getElementById('closeInfoModal');
+
+    // Tự động hiển thị modal nếu đang trong ứng dụng và chưa từng thấy
+    // Bật lên bằng cách bỏ comment đoạn code dưới đây nếu bạn muốn nó tự động hiện ra
+    /*
+    if (isInApp && !localStorage.getItem('modalSeen')) {
+      infoModalOverlay.classList.remove('hidden');
+      setTimeout(() => {
+        infoModalContent.classList.remove('modal-enter-from');
+        infoModalContent.classList.add('modal-enter-to');
+      }, 10);
+      localStorage.setItem('modalSeen', 'true');
+    }
+    */
+
+    closeInfoModalButton.addEventListener('click', () => {
+      infoModalContent.classList.remove('modal-enter-to');
+      infoModalContent.classList.add('modal-leave-to');
+      setTimeout(() => {
+        infoModalOverlay.classList.add('hidden');
+        infoModalContent.classList.remove('modal-leave-to'); // Reset cho lần sau
+        infoModalContent.classList.add('modal-enter-from'); // Reset trạng thái ban đầu
+      }, 300); // Đợi transition hoàn tất
+    });
+
+    if (!isInApp) {
+      window.location.replace(targetURL);
+      return;
+    }
+    
+    function tryOpenInAndroid(packages) {
+      let i = 0;
+      const attemptNext = () => {
+        if (i >= packages.length) {
+          // Fallback đến Play Store nếu tất cả các intent đều thất bại
+          window.location.href = 'https://play.google.com/store/apps/details?id=com.android.chrome';
+          return;
+        }
+        const pkg = packages[i++];
+        const intent = `intent:${targetURL.replace(/^https?:\/\//, '')}` +
+                       `#Intent;scheme=https;` +
+                       `package=${pkg};` +
+                       `S.browser_fallback_url=${encodeURIComponent(targetURL)};end`;
+        window.location.href = intent;
+        setTimeout(attemptNext, 1200); // Đợi trình duyệt phản hồi
+      };
+      attemptNext();
+    }
+
+    function tryOpenInIOS(schemes, appStoreLink) {
+      let i = 0;
+      const attemptNext = () => {
+        if (i >= schemes.length) {
+          // Fallback đến App Store nếu tất cả các scheme đều thất bại
+          window.location.href = appStoreLink;
+          return;
+        }
+        const scheme = schemes[i++];
+        const url = targetURL.replace(/^https?:\/\//, scheme + '://');
+        window.location.href = url;
+        setTimeout(attemptNext, 1200); // Đợi trình duyệt phản hồi
+      };
+      attemptNext();
+    }
+
+    openExternalBrowserButton.addEventListener('click', () => {
+      buttonText.classList.add('hidden');
+      loadingSpinner.classList.remove('hidden');
+
+      const androidPackages = ['com.android.chrome', 'org.mozilla.firefox', 'com.coccoc.browser', 'com.brave.browser', 'com.microsoft.emmx'];
+      const iosSchemes = ['googlechromes', 'googlechrome', 'firefox', 'brave', 'microsoft-edge'];
+
+      if (isAndroid) {
+        tryOpenInAndroid(androidPackages);
+      } else if (isIOS) {
+        tryOpenInIOS(iosSchemes, 'itms-apps://itunes.apple.com/app/id535886823'); // Chrome trên App Store
+      } else {
+        // Đối với trình duyệt máy tính hoặc nền tảng khác, mở trong tab mới
+        window.open(targetURL, '_blank');
+      }
+
+      // Kích hoạt lại nút và ẩn spinner sau một thời gian, đề phòng trường hợp chuyển hướng thất bại/bị hủy
+      setTimeout(() => {
+        buttonText.classList.remove('hidden');
+        loadingSpinner.classList.add('hidden');
+      }, 5000); // 5 giây
+    });
+
+    // --- Canvas Background Animation (tùy chọn, xóa nếu không muốn sử dụng) ---
+    const canvas = document.getElementById('backgroundCanvas');
+    if (canvas) { // Kiểm tra xem phần tử canvas có tồn tại không
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      class Particle {
+        constructor(x, y, size, speedX, speedY, color) {
+          this.x = x;
+          this.y = y;
+          this.size = size;
+          this.speedX = speedX;
+          this.speedY = speedY;
+          this.color = color;
+          this.initialY = y;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+
+          // Đơn giản là nảy ra khỏi cạnh trên/dưới
+          if (this.y + this.size > canvas.height || this.y - this.size < 0) {
+            this.speedY *= -1;
+          }
+          if (this.x + this.size > canvas.width || this.x - this.size < 0) {
+            this.speedX *= -1;
+          }
+        }
+        draw() {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        const colors = ['rgba(255, 255, 255, 0.2)', 'rgba(255, 255, 255, 0.3)', 'rgba(255, 255, 255, 0.1)'];
+        for (let i = 0; i < 50; i++) { // Số lượng hạt
+          const size = Math.random() * 5 + 2;
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          const speedX = (Math.random() * 0.4 - 0.2); // Di chuyển ngang chậm
+          const speedY = (Math.random() * 0.4 - 0.2); // Di chuyển dọc chậm
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          particles.push(new Particle(x, y, size, speedX, speedY, color));
+        }
+      }
+
+      function animateParticles() {
+        requestAnimationFrame(animateParticles);
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Xóa chỉ những gì được vẽ
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+        }
+      }
+
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        initParticles();
+      });
+
+      resizeCanvas();
+      initParticles();
+      animateParticles();
+    }
+  })();
+  </script>
+</body>
+</html>
