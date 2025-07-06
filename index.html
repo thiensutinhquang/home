@@ -9,6 +9,9 @@
     body {
       background: linear-gradient(to bottom right, #f0f4f8, #e2e8f0);
       color: #1a202c;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
     .animated-button {
       transition: transform 0.2s, box-shadow 0.2s;
@@ -67,10 +70,49 @@
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
     }
+
+    /* Sóng nước nền */
+    .wave-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .wave {
+      position: absolute;
+      bottom: 0;
+      width: 200%;
+      height: 100%;
+      background: rgba(56, 178, 172, 0.3);
+      border-radius: 100% 50% 0 0 / 100% 100% 0 0;
+      animation: waveAnim 6s linear infinite;
+      opacity: 0.6;
+    }
+    .wave:nth-child(2) {
+      background: rgba(56, 178, 172, 0.2);
+      animation-duration: 8s;
+      bottom: 10px;
+      opacity: 0.4;
+    }
+    @keyframes waveAnim {
+      0% {
+        transform: translateX(0) translateY(0);
+      }
+      50% {
+        transform: translateX(-25%) translateY(10px);
+      }
+      100% {
+        transform: translateX(-50%) translateY(0);
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
-  <div class="max-w-5xl w-full">
+  <div class="max-w-5xl w-full" style="position: relative; z-index: 10;">
     <header class="mb-10 text-center">
       <h1 class="text-4xl font-bold mb-2">Thiền Sư Tịnh Quang</h1>
       <p class="text-lg mb-2">Chào mừng quý đạo hữu đến với khuôn viên tâm linh</p>
@@ -107,6 +149,12 @@
   </div>
 
   <audio id="quoteSound" src="https://thiensutinhquang.github.io/home/chuong.mp3" preload="auto"></audio>
+
+  <!-- Sóng nước nền -->
+  <div class="wave-container" aria-hidden="true">
+    <div class="wave"></div>
+    <div class="wave"></div>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
