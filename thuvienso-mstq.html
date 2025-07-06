@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Đang chuyển hướng đến PWA...</title>
+  <title>Mở bằng trình duyệt mặc định</title>
   <link rel="dns-prefetch" href="//thiensutinhquang.github.io">
   <link rel="preconnect" href="https://thiensutinhquang.github.io">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -47,12 +47,23 @@
       opacity: 1;
       transform: scale(1);
     }
+
+    /* Initial hidden state for the main content to prevent flicker */
+    #mainContent {
+      opacity: 0;
+      transform: scale(0.98);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    #mainContent.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
   </style>
 </head>
 <body class="bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center min-h-screen relative overflow-hidden text-gray-800">
   <canvas id="backgroundCanvas" class="absolute inset-0 z-0"></canvas>
 
-  <div class="bg-white p-8 rounded-2xl shadow-xl text-center max-w-sm w-full mx-4 relative z-10 animate-subtle-pulse">
+  <div id="mainContent" class="bg-white p-8 rounded-2xl shadow-xl text-center max-w-sm w-full mx-4 relative z-10 animate-subtle-pulse">
     <div class="text-6xl mb-4" role="img" aria-label="Warning Icon">⚠️</div>
     <h1 class="text-3xl font-extrabold mb-3 text-gray-800">Mở bằng trình duyệt mặc định</h1>
     <p class="text-gray-700 mb-6 leading-relaxed">
@@ -79,7 +90,7 @@
         chúng thường sử dụng một trình duyệt nhúng có thể hạn chế hiệu suất hoặc một số tính năng.
       </p>
       <p class="text-gray-700 mb-6 text-left leading-relaxed font-semibold">
-        Để đảm bảo trải nghiệm đầy đủ, mượt mà và an toàn nhất, vui lòng nhấn nút "Mở trong trình duyệt" ở trang trước.
+        Để đảm bảo trải nghiệm đầy đủ, mượt mà và an toàn nhất, vui lòng nhấn nút "Mở trong trình duyệt" ở trang này.
       </p>
       <button id="closeInfoModal" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200">
         Đã hiểu, đóng thông báo
@@ -88,18 +99,14 @@
   </div>
 
   <script>
-  (function(){
-    // === PHẦN QUAN TRỌNG: XỬ LÝ LINK ĐÍCH ===
-    // Đã cập nhật baseAppURL theo yêu cầu
+  document.addEventListener('DOMContentLoaded', function() {
     const baseAppURL = 'https://thiensutinhquang.github.io/home/'; 
     
     const params = new URLSearchParams(window.location.search);
-    const videoId = params.get('v'); // Giữ lại để tương thích ngược nếu cần
-    const videoTime = params.get('t'); // Giữ lại để tương thích ngược nếu cần
+    const videoId = params.get('v');
+    const videoTime = params.get('t');
 
     let targetURL = baseAppURL;
-    // Bạn có thể tùy chỉnh logic này nếu muốn các tham số 'v' và 't' ảnh hưởng đến trang 'home'
-    // Ví dụ: nếu 'home' cũng có thể xử lý các tham số video
     if (videoId) {
       targetURL += `?v=${videoId}`;
       if (videoTime) {
@@ -107,7 +114,6 @@
       }
     }
     
-    // === PHẦN PHÁT HIỆN VÀ CHUYỂN HƯỚNG ===
     const ua           = navigator.userAgent || '';
     const isAndroid    = /Android/i.test(ua);
     const isIOS        = /iPhone|iPad|iPod/i.test(ua);
@@ -120,40 +126,44 @@
     const infoModalOverlay = document.getElementById('infoModalOverlay');
     const infoModalContent = document.getElementById('infoModalContent');
     const closeInfoModalButton = document.getElementById('closeInfoModal');
+    const mainContent = document.getElementById('mainContent'); // New: Reference to main content
 
-    // Tự động hiển thị modal nếu đang trong ứng dụng và chưa từng thấy
-    // Bật lên bằng cách bỏ comment đoạn code dưới đây nếu bạn muốn nó tự động hiện ra
-    /*
-    if (isInApp && !localStorage.getItem('modalSeen')) {
-      infoModalOverlay.classList.remove('hidden');
-      setTimeout(() => {
-        infoModalContent.classList.remove('modal-enter-from');
-        infoModalContent.classList.add('modal-enter-to');
-      }, 10);
-      localStorage.setItem('modalSeen', 'true');
+    // Hiển thị nội dung chính sau khi DOM sẵn sàng để tránh bị Telegram chặn quá nhanh
+    mainContent.classList.add('visible');
+
+    // Chuyển hướng tự động CHỈ KHI KHÔNG PHẢI LÀ TRÌNH DUYỆT NHÚNG
+    if (!isInApp) {
+      console.log('Không phải trình duyệt nhúng, chuyển hướng trực tiếp...');
+      window.location.replace(targetURL);
+      return; // Dừng thực thi script nếu đã chuyển hướng
+    } else {
+      console.log('Đang trong trình duyệt nhúng, hiển thị thông báo.');
+      // Optional: Show info modal automatically if in-app and not yet seen
+      // if (!localStorage.getItem('modalSeen')) {
+      //   infoModalOverlay.classList.remove('hidden');
+      //   setTimeout(() => {
+      //     infoModalContent.classList.remove('modal-enter-from');
+      //     infoModalContent.classList.add('modal-enter-to');
+      //   }, 10);
+      //   localStorage.setItem('modalSeen', 'true');
+      // }
     }
-    */
 
     closeInfoModalButton.addEventListener('click', () => {
       infoModalContent.classList.remove('modal-enter-to');
       infoModalContent.classList.add('modal-leave-to');
       setTimeout(() => {
         infoModalOverlay.classList.add('hidden');
-        infoModalContent.classList.remove('modal-leave-to'); // Reset cho lần sau
-        infoModalContent.classList.add('modal-enter-from'); // Reset trạng thái ban đầu
-      }, 300); // Đợi transition hoàn tất
+        infoModalContent.classList.remove('modal-leave-to'); 
+        infoModalContent.classList.add('modal-enter-from'); 
+      }, 300);
     });
 
-    if (!isInApp) {
-      window.location.replace(targetURL);
-      return;
-    }
-    
     function tryOpenInAndroid(packages) {
       let i = 0;
       const attemptNext = () => {
         if (i >= packages.length) {
-          // Fallback đến Play Store nếu tất cả các intent đều thất bại
+          console.log('Tất cả các gói Android đều thất bại, chuyển hướng đến Play Store.');
           window.location.href = 'https://play.google.com/store/apps/details?id=com.android.chrome';
           return;
         }
@@ -162,8 +172,9 @@
                        `#Intent;scheme=https;` +
                        `package=${pkg};` +
                        `S.browser_fallback_url=${encodeURIComponent(targetURL)};end`;
+        console.log('Đang cố gắng mở Android Intent:', intent);
         window.location.href = intent;
-        setTimeout(attemptNext, 1200); // Đợi trình duyệt phản hồi
+        setTimeout(attemptNext, 1200); 
       };
       attemptNext();
     }
@@ -172,19 +183,21 @@
       let i = 0;
       const attemptNext = () => {
         if (i >= schemes.length) {
-          // Fallback đến App Store nếu tất cả các scheme đều thất bại
+          console.log('Tất cả các scheme iOS đều thất bại, chuyển hướng đến App Store.');
           window.location.href = appStoreLink;
           return;
         }
         const scheme = schemes[i++];
         const url = targetURL.replace(/^https?:\/\//, scheme + '://');
+        console.log('Đang cố gắng mở iOS Scheme:', url);
         window.location.href = url;
-        setTimeout(attemptNext, 1200); // Đợi trình duyệt phản hồi
+        setTimeout(attemptNext, 1200);
       };
       attemptNext();
     }
 
     openExternalBrowserButton.addEventListener('click', () => {
+      console.log('Nút MỞ TRONG TRÌNH DUYỆT được click.');
       buttonText.classList.add('hidden');
       loadingSpinner.classList.remove('hidden');
 
@@ -194,22 +207,22 @@
       if (isAndroid) {
         tryOpenInAndroid(androidPackages);
       } else if (isIOS) {
-        tryOpenInIOS(iosSchemes, 'itms-apps://itunes.apple.com/app/id535886823'); // Chrome trên App Store
+        tryOpenInIOS(iosSchemes, 'itms-apps://itunes.apple.com/app/id535886823'); 
       } else {
-        // Đối với trình duyệt máy tính hoặc nền tảng khác, mở trong tab mới
         window.open(targetURL, '_blank');
       }
 
-      // Kích hoạt lại nút và ẩn spinner sau một thời gian, đề phòng trường hợp chuyển hướng thất bại/bị hủy
+      // Re-enable button and hide spinner after a delay, in case redirection fails/is cancelled
       setTimeout(() => {
+        console.log('Kích hoạt lại nút sau 5 giây.');
         buttonText.classList.remove('hidden');
         loadingSpinner.classList.add('hidden');
-      }, 5000); // 5 giây
+      }, 5000); 
     });
 
-    // --- Canvas Background Animation (tùy chọn, xóa nếu không muốn sử dụng) ---
+    // --- Canvas Background Animation (optional) ---
     const canvas = document.getElementById('backgroundCanvas');
-    if (canvas) { // Kiểm tra xem phần tử canvas có tồn tại không
+    if (canvas) {
       const ctx = canvas.getContext('2d');
       let particles = [];
 
@@ -226,13 +239,11 @@
           this.speedX = speedX;
           this.speedY = speedY;
           this.color = color;
-          this.initialY = y;
         }
         update() {
           this.x += this.speedX;
           this.y += this.speedY;
 
-          // Đơn giản là nảy ra khỏi cạnh trên/dưới
           if (this.y + this.size > canvas.height || this.y - this.size < 0) {
             this.speedY *= -1;
           }
@@ -251,12 +262,12 @@
       function initParticles() {
         particles = [];
         const colors = ['rgba(255, 255, 255, 0.2)', 'rgba(255, 255, 255, 0.3)', 'rgba(255, 255, 255, 0.1)'];
-        for (let i = 0; i < 50; i++) { // Số lượng hạt
+        for (let i = 0; i < 50; i++) {
           const size = Math.random() * 5 + 2;
           const x = Math.random() * canvas.width;
           const y = Math.random() * canvas.height;
-          const speedX = (Math.random() * 0.4 - 0.2); // Di chuyển ngang chậm
-          const speedY = (Math.random() * 0.4 - 0.2); // Di chuyển dọc chậm
+          const speedX = (Math.random() * 0.4 - 0.2);
+          const speedY = (Math.random() * 0.4 - 0.2);
           const color = colors[Math.floor(Math.random() * colors.length)];
           particles.push(new Particle(x, y, size, speedX, speedY, color));
         }
@@ -264,7 +275,7 @@
 
       function animateParticles() {
         requestAnimationFrame(animateParticles);
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Xóa chỉ những gì được vẽ
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (let i = 0; i < particles.length; i++) {
           particles[i].update();
           particles[i].draw();
@@ -280,7 +291,7 @@
       initParticles();
       animateParticles();
     }
-  })();
+  });
   </script>
 </body>
 </html>
