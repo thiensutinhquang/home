@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Trang Chủ - Thiền Sư Tịnh Quang</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <style>
     body {
       background: linear-gradient(to bottom right, #f0f4f8, #e2e8f0);
@@ -31,44 +31,50 @@
       75% { transform: translateX(-2px); }
       100% { transform: translateX(0); }
     }
+    .quote-transition {
+      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+      display: inline-block;
+    }
+    .quote-transition.fade-out {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .quote-transition.fade-in {
+      opacity: 1;
+      transform: scale(1);
+    }
+    /* Hiệu ứng ánh sáng lan tỏa */
+    .light-flare {
+      position: relative;
+      z-index: 1;
+    }
+    .light-flare::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300%;
+      height: 300%;
+      background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      transition: transform 1.2s ease, opacity 1.2s ease;
+      pointer-events: none;
+      z-index: -1;
+      border-radius: 50%;
+    }
+    .flare-active::after {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
-  <audio id="bg-music" autoplay loop>
-    <source src="https://raw.githubusercontent.com/thiensutinhquang/home/main/chuong.mp3" type="audio/mp3">
-    Trình duyệt của bạn không hỗ trợ âm thanh.
-  </audio>
-  <script>
-    const music = document.getElementById('bg-music');
-    music.volume = 0;
-    const fadeIn = () => {
-      let vol = 0;
-      const interval = setInterval(() => {
-        if (vol < 0.5) {
-          vol += 0.02;
-          music.volume = vol;
-        } else {
-          clearInterval(interval);
-        }
-      }, 200);
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const playPromise = music.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          fadeIn();
-        }).catch((error) => {
-          console.log('Tự động phát bị chặn bởi trình duyệt:', error);
-        });
-      }
-    });
-  </script>
-
   <div class="max-w-5xl w-full">
     <header class="mb-10 text-center">
       <h1 class="text-4xl font-bold mb-2">Thiền Sư Tịnh Quang</h1>
-      <p class="text-lg">Chào mừng quý đạo hữu đến với khuôn viên tâm linh</p>
+      <p class="text-lg mb-2">Chào mừng quý đạo hữu đến với khuôn viên tâm linh</p>
+      <blockquote id="quote" class="italic text-xl text-gray-700 quote-transition">“Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong”</blockquote>
     </header>
 
     <!-- Khu vực nền tảng mạng xã hội -->
@@ -99,5 +105,54 @@
       &copy; 2025 Thiền Sư Tịnh Quang. Tất cả các quyền được bảo lưu.
     </footer>
   </div>
+
+  <audio id="quoteSound" src="https://thiensutinhquang.github.io/home/chuong.mp3" preload="auto"></audio>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const quotes = [
+        "Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong",
+        "Hãy biến hôm nay thành một ngày tuyệt vời nhé. Đừng quên hãy thường niệm. \"Mình là phật, mình thấy ai ai cũng là phật, như Đức Phật Thích Ca.\"",
+        "Hãy cảm ơn tất cả và yêu thương tất cả",
+        "Về nhà thôi, Mình là ai",
+        "Tinh tấn tu hành, thắng chính mình",
+        "Khảo là phải dùng trí huệ, sống tốt trong hiện tại",
+        "Đức tin tuyệt đối nhưng phải quán chiếu dùng trí huệ",
+        "Nhận thức được vị phật bên trong mình",
+        "Minh sư đã đi qua hết rồi giờ quay lại chỉ rõ để không bị lạc"
+      ];
+
+      const quoteEl = document.getElementById("quote");
+      const quoteSound = document.getElementById("quoteSound");
+      if (!quoteEl) return;
+
+      quoteEl.classList.add("light-flare");
+
+      let index = 0;
+
+      function showFlare() {
+        quoteEl.classList.add("flare-active");
+        setTimeout(() => quoteEl.classList.remove("flare-active"), 1500);
+      }
+
+      setInterval(() => {
+        quoteEl.classList.add("fade-out");
+        setTimeout(() => {
+          index = (index + 1) % quotes.length;
+          quoteEl.textContent = '“' + quotes[index] + '”';
+          quoteEl.classList.remove("fade-out");
+          quoteEl.classList.add("fade-in");
+          if (quoteSound) {
+            quoteSound.currentTime = 0;
+            quoteSound.play().catch(() => {});
+          }
+          showFlare();
+        }, 1000);
+        setTimeout(() => {
+          quoteEl.classList.remove("fade-in");
+        }, 2000);
+      }, 7000);
+    });
+  </script>
 </body>
 </html>
