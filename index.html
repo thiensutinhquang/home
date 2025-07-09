@@ -1,229 +1,274 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Trang Chủ - Thiền Sư Tịnh Quang</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <style>
-    body {
-      background: linear-gradient(135deg, #3a86ff, #8338ec);
-      color: #f0f0f0;
-      position: relative;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    .animated-button {
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .animated-button:hover {
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    }
-    .animated-button:active {
-      transform: translateY(1px) scale(0.98);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .shake:hover {
-      animation: shake 0.3s ease-in-out;
-    }
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-3px); }
-      50% { transform: translateX(3px); }
-      75% { transform: translateX(-2px); }
-      100% { transform: translateX(0); }
-    }
-    .quote-transition {
-      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-      display: inline-block;
-    }
-    .quote-transition.fade-out {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    .quote-transition.fade-in {
-      opacity: 1;
-      transform: scale(1);
-    }
-    .light-flare {
-      position: relative;
-      z-index: 1;
-    }
-    .light-flare::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 300%;
-      height: 300%;
-      background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
-      transform: translate(-50%, -50%) scale(0);
-      opacity: 0;
-      transition: transform 1.2s ease, opacity 1.2s ease;
-      pointer-events: none;
-      z-index: -1;
-      border-radius: 50%;
-    }
-    .flare-active::after {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minh Sư Tinh Quang - Các Nền Tảng</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải Font Inter từ Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Sử dụng font Inter làm font chữ mặc định */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Chặn cuộn ngang khi vuốt */
+            overflow-x: hidden;
+        }
 
-    /* Hiệu ứng mưa phùn nhẹ */
-    .rain-container {
-      pointer-events: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .raindrop {
-      position: absolute;
-      top: -10px;
-      background: radial-gradient(circle, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.15) 80%);
-      border-radius: 50%;
-      filter: drop-shadow(0 0 2px #fff);
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-      animation-name: fall;
-      opacity: 0.6;
-    }
-    /* Tạo hiệu ứng gió (dịch ngang nhẹ) */
-    @keyframes fall {
-      0% {
-        transform: translateX(0) translateY(0) scaleX(0.5);
-        opacity: 1;
-        filter: drop-shadow(0 0 3px #fff);
-      }
-      50% {
-        transform: translateX(calc(var(--wind) * 10px)) translateY(50vh) scaleX(1);
-        opacity: 0.8;
-        filter: drop-shadow(0 0 6px #ccf);
-      }
-      100% {
-        transform: translateX(calc(var(--wind) * 20px)) translateY(100vh) scaleX(0.7);
-        opacity: 0;
-        filter: drop-shadow(0 0 1px #88f);
-      }
-    }
-  </style>
+        /* Keyframes cho hiệu ứng "thở" của tiêu đề */
+        @keyframes breath {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+        .breathing-text {
+            animation: breath 4s ease-in-out infinite;
+        }
+
+        /* Keyframes cho hiệu ứng "bung tỏa sáng" khi chữ xuất hiện */
+        @keyframes bloomIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+                text-shadow: none;
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.02);
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.7), 0 0 8px rgba(255, 255, 255, 0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                text-shadow: none;
+            }
+        }
+
+        /* Keyframes cho hiệu ứng mờ đi */
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        /* Lớp để áp dụng các animation */
+        .quote-text {
+            opacity: 0; /* Bắt đầu với trạng thái ẩn */
+        }
+        .animate-bloom-in {
+            animation: bloomIn 1.5s ease-out forwards;
+        }
+        .animate-fade-out {
+            animation: fadeOut 1s ease-in forwards;
+        }
+
+        /* Hiệu ứng khi nhấn nút */
+        .btn-press {
+            transition: transform 0.1s ease;
+        }
+        .btn-press:active {
+            transform: scale(0.95);
+        }
+        
+        /* Đảm bảo khu vực vuốt không chọn văn bản */
+        #quote-container {
+            user-select: none;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+ */
+        }
+    </style>
+
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
-  <div class="max-w-5xl w-full" style="position: relative; z-index: 10;">
-    <header class="mb-10 text-center">
-      <h1 class="text-4xl font-bold mb-2">Thiền Sư Tịnh Quang</h1>
-      <p class="text-lg mb-2">Chào mừng quý đạo hữu đến với khuôn viên tâm linh</p>
-      <blockquote id="quote" class="italic text-xl text-white quote-transition">“Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong”</blockquote>
-    </header>
+<body class="bg-gradient-to-r from-orange-400 to-yellow-500 min-h-screen flex items-center justify-center p-4 relative">
+    
+    <!-- Menu Overlay cho di động (ban đầu bị ẩn) -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex-col items-center justify-center text-white text-2xl space-y-8 hidden">
+        <button id="close-menu-btn" class="absolute top-8 right-8 text-4xl">×</button>
+        <a href="https://thiensutinhquang.github.io/home/" target="_blank" class="hover:text-orange-400">TRANG CHỦ</a>
+        <h3 class="text-orange-400 pt-4">CÁC NỀN TẢNG</h3>
+        <a href="https://www.youtube.com/@ThiensuTinhQuang" target="_blank" class="hover:text-orange-400">YouTube</a>
+        <a href="https://www.tiktok.com/@thiensutinhquang" target="_blank" class="hover:text-orange-400">TikTok</a>
+        <a href="https://www.facebook.com/groups/minhsutinhquang" target="_blank" class="hover:text-orange-400">Facebook</a>
+        <a href="https://t.me/thiensutinhquang" target="_blank" class="hover:text-orange-400">Telegram</a>
+        <a href="https://zalo.me/g/vjkhzt168" target="_blank" class="hover:text-orange-400">Zalo</a>
+    </div>
 
-    <!-- Khu vực nền tảng mạng xã hội -->
-    <section class="mb-10">
-      <h2 class="text-2xl font-semibold mb-4 text-center">Kết nối mạng xã hội</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a href="https://www.youtube.com/@ThiensuTinhQuang" target="_blank" class="bg-white text-red-600 font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-red-50 animated-button shake">YouTube</a>
-        <a href="https://www.tiktok.com/@thiensutinhquang" target="_blank" class="bg-white text-black font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-gray-100 animated-button shake">TikTok</a>
-        <a href="https://www.facebook.com/groups/minhsutinhquang" target="_blank" class="bg-white text-blue-600 font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-blue-50 animated-button shake">Facebook</a>
-        <a href="https://t.me/thiensutinhquang" target="_blank" class="bg-white text-cyan-600 font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-cyan-50 animated-button shake">Telegram</a>
-        <a href="https://zalo.me/g/vjkhzt168" target="_blank" class="bg-white text-blue-500 font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-blue-100 animated-button shake">Zalo</a>
-      </div>
-    </section>
+    <!-- Nút Hamburger Menu (chỉ hiện trên di động) -->
+    <button id="hamburger-btn" class="md:hidden fixed top-6 right-6 z-40 text-white">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+    </button>
 
-    <!-- Khu vực nội dung tâm linh -->
-    <section>
-      <h2 class="text-2xl font-semibold mb-4 text-center">Kho tàng nội dung</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a href="https://thiensutinhquang.github.io/Playlist-YouTube/" class="bg-yellow-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-yellow-600 animated-button shake">Xem Video</a>
-        <a href="https://thiensutinhquang.github.io/playtholientuc/" class="bg-green-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-green-600 animated-button shake">Kho Thơ</a>
-        <a href="https://thiensutinhquang.github.io/PlayMusic/" class="bg-purple-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-purple-600 animated-button shake">Kho Nhạc</a>
-        <a href="https://thiensutinhquang.github.io/GiaoLy/" class="bg-pink-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-pink-600 animated-button shake">Giáo Lý</a>
-        <a href="https://thiensutinhquang.github.io/Admin/docnoidung.html" class="bg-gray-700 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-gray-800 animated-button shake">Các công cụ BLV</a>
-      </div>
-    </section>
+    <!-- Container chính -->
+    <div class="text-center text-white w-full max-w-4xl mx-auto">
 
-    <footer class="mt-12 text-center text-sm text-gray-300">
-      &copy; 2025 Thiền Sư Tịnh Quang. Tất cả các quyền được bảo lưu.
-    </footer>
-  </div>
+        <!-- Logo -->
+        <img src="https://raw.githubusercontent.com/thiensutinhquang/Admin/main/icons/icon.png" alt="Logo Minh Sư Tinh Quang" class="mx-auto mb-6 w-20 h-20 md:w-24 md:h-24 rounded-full shadow-lg" onerror="this.onerror=null;this.src='https://placehold.co/96x96/f97316/ffffff?text=Logo';">
 
-  <audio id="quoteSound" src="https://thiensutinhquang.github.io/home/chuong.mp3" preload="auto"></audio>
+        <!-- Menu điều hướng trên máy tính (ẩn trên di động) -->
+        <nav class="hidden md:flex flex-wrap items-center justify-center gap-3 mb-10">
+            <a href="https://thiensutinhquang.github.io/home/" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">TRANG CHỦ</a>
+            <a href="https://www.youtube.com/@ThiensuTinhQuang" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">YOUTUBE</a>
+            <a href="https://www.tiktok.com/@thiensutinhquang" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">TIKTOK</a>
+            <a href="https://www.facebook.com/groups/minhsutinhquang" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">FACE</a>
+            <a href="https://t.me/thiensutinhquang" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">TELE</a>
+            <a href="https://zalo.me/g/vjkhzt168" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">ZALO</a>
+        </nav>
 
-  <!-- Hiệu ứng mưa phùn -->
-  <div class="rain-container" aria-hidden="true"></div>
+        <!-- Tiêu đề chính -->
+        <h1 class="text-3xl md:text-5xl font-bold tracking-wider mb-6 breathing-text">
+            TRANG NÀY ĐANG PHÁT TRIỂN
+        </h1>
+        
+        <!-- Khu vực hiển thị các dòng chữ luân phiên (có thể vuốt) -->
+        <div id="quote-container" class="mt-6 text-lg md:text-xl font-light min-h-[150px] flex flex-col items-center justify-center px-2 cursor-pointer">
+            <p id="quote-display" class="quote-text"></p>
+            <p class="text-xs text-white/50 mt-4 md:hidden">(Vuốt để đổi)</p>
+        </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // Tạo giọt mưa
-      const rainContainer = document.querySelector('.rain-container');
-      const dropsCount = 80;
+        <!-- ========== BẮT ĐẦU KHU VỰC GIÁO LÝ ========== -->
+        <div class="mt-12 w-full px-4">
+            <!-- Tiêu đề cho mục mới -->
+            <h2 class="text-2xl md:text-3xl font-semibold mb-6">GIÁO LÝ</h2>
+            
+            <!-- Lưới chứa các link, tự động điều chỉnh theo kích thước màn hình -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- Link 1: Giới Thiệu -->
+                <a href="https://thiensutinhquang.github.io/GiaoLy/gioithieu.html" target="_blank" class="block bg-white/20 p-4 rounded-lg text-white font-medium text-center hover:bg-white/30 transition-all duration-300 btn-press">
+                    Giới Thiệu
+                </a>
 
-      for(let i = 0; i < dropsCount; i++) {
-        const drop = document.createElement('div');
-        drop.classList.add('raindrop');
+                <!-- Link 2: Giới Luật -->
+                <a href="https://thiensutinhquang.github.io/GiaoLy/gioiluat.html" target="_blank" class="block bg-white/20 p-4 rounded-lg text-white font-medium text-center hover:bg-white/30 transition-all duration-300 btn-press">
+                    Giới Luật
+                </a>
 
-        // Kích thước giọt (rộng 1-3px, cao 3-10px)
-        const width = Math.random() * 2 + 1;
-        drop.style.width = width + 'px';
-        drop.style.height = (width * 4 + Math.random() * 6) + 'px';
+                <!-- SAO CHÉP VÀ DÁN VÀO ĐÂY ĐỂ THÊM LINK MỚI -->
+                <!-- Ví dụ link 3 (chưa có thật) -->
+                <!-- 
+                <a href="#" target="_blank" class="block bg-white/20 p-4 rounded-lg text-white font-medium text-center hover:bg-white/30 transition-all duration-300 btn-press">
+                    Bài Học 1
+                </a>
+                -->
 
-        // Vị trí ngang random 0-100vw
-        drop.style.left = Math.random() * 100 + 'vw';
+            </div>
+        </div>
+        <!-- ========== KẾT THÚC KHU VỰC GIÁO LÝ ========== -->
 
-        // Thời gian rơi 4-7 giây
-        drop.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        <!-- Các nút bấm lớn -->
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4 mt-8">
+            <a href="https://thiensutinhquang.github.io/PlayMusic/" target="_blank" class="w-full md:w-auto bg-white text-orange-500 font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-orange-100 transition-colors duration-300 btn-press">NGHE NHẠC</a>
+            <a href="https://thiensutinhquang.github.io/playtholientuc/" target="_blank" class="w-full md:w-auto bg-white text-orange-500 font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-orange-100 transition-colors duration-300 btn-press">NGHE KHO THƠ</a>
+            <a href="https://thiensutinhquang.github.io/Playlist-YouTube/" target="_blank" class="w-full md:w-auto bg-white text-orange-500 font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-orange-100 transition-colors duration-300 btn-press">XEM VIDEO</a>
+        </div>
+    </div>
 
-        // Delay rơi ngẫu nhiên 0-7 giây
-        drop.style.animationDelay = Math.random() * 7 + 's';
+    <script>
+        // --- Logic cho menu Hamburger ---
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-        // Biến CSS custom để điều khiển gió (giá trị từ -1 đến 1)
-        drop.style.setProperty('--wind', (Math.random() * 2 - 1).toFixed(2));
+        hamburgerBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            mobileMenu.classList.add('flex');
+        });
 
-        rainContainer.appendChild(drop);
-      }
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('flex');
+        });
 
-      // Quote + hiệu ứng
-      const quotes = [
-        "Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong",
-        "Hãy biến hôm nay thành một ngày tuyệt vời nhé. Đừng quên hãy thường niệm. \"Mình là phật, mình thấy ai ai cũng là phật, như Đức Phật Thích Ca.\"",
-        "Hãy cảm ơn tất cả và yêu thương tất cả",
-        "Về nhà thôi, Mình là ai",
-        "Tinh tấn tu hành, thắng chính mình",
-        "Khảo là phải dùng trí huệ, sống tốt trong hiện tại",
-        "Đức tin tuyệt đối nhưng phải quán chiếu dùng trí huệ",
-        "Nhận thức được vị phật bên trong mình",
-        "Minh sư đã đi qua hết rồi giờ quay lại chỉ rõ để không bị lạc"
-      ];
-      const quoteEl = document.getElementById("quote");
-      const quoteSound = document.getElementById("quoteSound");
-      if (!quoteEl) return;
+        // --- Logic cho các dòng chữ luân phiên và vuốt ---
+        const quotes = [
+            "Bản chất của Thượng Đế là sự sáng suốt, vô hạn,<br>không bị giới hạn bởi không gian và thời gian.",
+            "Mỗi con người đều mang trong mình một phần của Thượng Đế<br>(Phật Tính, Tánh Biết, Sự Sáng Suốt).",
+            "Bản ngã (cái tôi cá nhân) là phần của chúng ta bị đồng hóa với những từ trường tiêu cực<br>(tham, sân, si, sợ hãi, lo lắng).",
+            "Thực hành quan sát suy nghĩ, cảm xúc<br>mà không bị cuốn theo hay đồng hóa với chúng.",
+            "Khi gặp khó khăn, hãy xem đó là cơ hội<br>để học hỏi và trưởng thành.",
+            "Hiểu rằng mọi sự vật, hiện tượng, con người<br>đều là biểu hiện của Thượng Đế.",
+            "Không Có Sự Phân Chia Thực Sự<br>(Thiện Ác, Phật/Ma là Vai Diễn)",
+            "Nguồn Gốc Sự Sống,<br>Sự Sống Khắp Vũ Trụ",
+            "Bí Quyết Vượt Qua Cửa Tử:<br>Bình Tĩnh Quan Sát, Hít Thở Sâu (21 Phút),<br>Niệm Chú Thành Tâm, Tập Thể Dục Tại Chỗ (10 Phút)",
+            "Hóa Giải Suy Nghĩ Miên Man:<br>Thiền Quan Sát Tạp Niệm, Không Đồng Hóa, Không Sợ Hãi.<br>Sống Tỉnh Thức"
+        ];
+        
+        const quoteDisplay = document.getElementById('quote-display');
+        let currentQuoteIndex = 0;
+        let quoteInterval;
 
-      quoteEl.classList.add("light-flare");
+        function showQuote(index) {
+            // Áp dụng hiệu ứng mờ đi
+            quoteDisplay.classList.remove('animate-bloom-in');
+            quoteDisplay.classList.add('animate-fade-out');
 
-      let index = 0;
+            // Đợi hiệu ứng mờ kết thúc rồi mới đổi chữ
+            setTimeout(() => {
+                currentQuoteIndex = (index + quotes.length) % quotes.length;
+                // Sử dụng innerHTML để hiển thị thẻ <br> cho việc xuống dòng
+                quoteDisplay.innerHTML = quotes[currentQuoteIndex];
+                
+                // Áp dụng hiệu ứng "bung tỏa sáng"
+                quoteDisplay.classList.remove('animate-fade-out');
+                quoteDisplay.classList.add('animate-bloom-in');
+            }, 1000); // Đợi 1 giây cho hiệu ứng mờ
+        }
 
-      function showFlare() {
-        quoteEl.classList.add("flare-active");
-        setTimeout(() => quoteEl.classList.remove("flare-active"), 1500);
-      }
+        function startQuoteLoop() {
+            clearInterval(quoteInterval);
+            quoteInterval = setInterval(() => {
+                showQuote(currentQuoteIndex + 1);
+            }, 12000); // Tăng thời gian hiển thị lên 12 giây
+        }
 
-      setInterval(() => {
-        quoteEl.classList.add("fade-out");
-        setTimeout(() => {
-          index = (index + 1) % quotes.length;
-          quoteEl.textContent = '“' + quotes[index] + '”';
-          quoteEl.classList.remove("fade-out");
-          quoteEl.classList.add("fade-in");
-          if (quoteSound) {
-            quoteSound.currentTime = 0;
-            quoteSound.play().catch(() => {});
-          }
-          showFlare();
-        }, 1000);
-        setTimeout(() => {
-          quoteEl.classList.remove("fade-in");
-        }, 2000);
-      }, 7000);
-    });
-  </script>
+        // --- Logic vuốt ---
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const quoteContainer = document.getElementById('quote-container');
+
+        quoteContainer.addEventListener('touchstart', (event) => {
+            touchStartX = event.changedTouches[0].screenX;
+        }, { passive: true });
+
+        quoteContainer.addEventListener('touchend', (event) => {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50; // Cần vuốt ít nhất 50px
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Vuốt sang trái
+                showQuote(currentQuoteIndex + 1);
+                startQuoteLoop(); // Reset lại chu kỳ thời gian
+            } else if (touchEndX > touchStartX + swipeThreshold) {
+                // Vuốt sang phải
+                showQuote(currentQuoteIndex - 1);
+                startQuoteLoop(); // Reset lại chu kỳ thời gian
+            }
+        }
+
+        // --- Khởi tạo ---
+        // Hiển thị ngay dòng chữ đầu tiên với hiệu ứng bung tỏa
+        document.addEventListener('DOMContentLoaded', () => {
+            quoteDisplay.innerHTML = quotes[currentQuoteIndex];
+            quoteDisplay.classList.add('animate-bloom-in');
+            startQuoteLoop();
+        });
+
+    </script>
+
 </body>
 </html>
