@@ -36,7 +36,7 @@
     }
     .quote-transition {
       transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-      display: inline-block;
+      /* Đã xóa 'display: inline-block' để đảm bảo căn giữa chính xác */
     }
     .quote-transition.fade-out {
       opacity: 0;
@@ -107,27 +107,20 @@
         filter: drop-shadow(0 0 1px #88f);
       }
     }
+    /* Thêm bóng đổ cho chữ màu vàng để dễ đọc hơn */
+    #quote {
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
   <div class="max-w-5xl w-full" style="position: relative; z-index: 10;">
-    <header class="mb-10 text-center">
+    <header class="text-center">
       <h1 class="text-4xl font-bold mb-2">Thiền Sư Tịnh Quang</h1>
       <p class="text-lg mb-2">Chào mừng quý đạo hữu đến với khuôn viên tâm linh</p>
-      <blockquote id="quote" class="italic text-xl text-white quote-transition">“Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong”</blockquote>
     </header>
 
-    <!-- Khu vực nền tảng mạng xã hội -->
-    <section class="mb-10">
-      <h2 class="text-2xl font-semibold mb-4 text-center">Kết nối mạng xã hội</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a href="https://www.youtube.com/@ThiensuTinhQuang" target="_blank" class="bg-white text-red-600 font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-red-50 animated-button shake">YouTube</a>
-        <a href="https://www.tiktok.com/@thiensutinhquang" target="_blank" class="bg-white text-black font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-gray-100 animated-button shake">TikTok</a>
-        <a href="https://www.facebook.com/groups/minhsutinhquang" target="_blank" class="bg-white text-blue-600 font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-blue-50 animated-button shake">Facebook</a>
-        <a href="https://t.me/thiensutinhquang" target="_blank" class="bg-white text-cyan-600 font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-cyan-50 animated-button shake">Telegram</a>
-        <a href="https://zalo.me/g/vjkhzt168" target="_blank" class="bg-white text-blue-500 font-semibold py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-blue-100 animated-button shake">Zalo</a>
-      </div>
-    </section>
+    <blockquote id="quote" class="italic text-2xl text-yellow-400 quote-transition text-center my-12 min-h-[8rem] flex items-center justify-center">“Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong”</blockquote>
 
     <!-- Khu vực nội dung tâm linh -->
     <section>
@@ -138,6 +131,22 @@
         <a href="https://thiensutinhquang.github.io/PlayMusic/" class="bg-purple-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-purple-600 animated-button shake">Kho Nhạc</a>
         <a href="https://thiensutinhquang.github.io/GiaoLy/" class="bg-pink-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-pink-600 animated-button shake">Giáo Lý</a>
         <a href="https://thiensutinhquang.github.io/Admin/docnoidung.html" class="bg-gray-700 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-gray-800 animated-button shake">Các công cụ BLV</a>
+        
+        <!-- Menu xổ xuống cho Mạng xã hội -->
+        <div class="relative" id="social-dropdown-container">
+            <button id="social-dropdown-btn" class="bg-blue-500 text-white w-full py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-blue-600 animated-button shake">
+                Kết nối
+            </button>
+            <div id="social-dropdown-menu" class="hidden absolute bottom-full mb-2 w-full bg-white rounded-2xl shadow-2xl p-2 z-20">
+                <div class="flex flex-col gap-2">
+                    <a href="https://www.youtube.com/@ThiensuTinhQuang" target="_blank" class="block text-red-600 font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">YouTube</a>
+                    <a href="https://www.tiktok.com/@thiensutinhquang" target="_blank" class="block text-black font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">TikTok</a>
+                    <a href="https://www.facebook.com/groups/minhsutinhquang" target="_blank" class="block text-blue-600 font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">Facebook</a>
+                    <a href="https://t.me/thiensutinhquang" target="_blank" class="block text-cyan-600 font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">Telegram</a>
+                    <a href="https://zalo.me/g/vjkhzt168" target="_blank" class="block text-blue-500 font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">Zalo</a>
+                </div>
+            </div>
+        </div>
       </div>
     </section>
 
@@ -1167,6 +1176,25 @@
       
       // 2. Lên lịch cho lần thay đổi đầu tiên dựa trên độ dài của câu nói đầu tiên
       scheduleNextQuote();
+
+      // --- LOGIC CHO MENU XỔ XUỐNG ---
+      const dropdownBtn = document.getElementById('social-dropdown-btn');
+      const dropdownMenu = document.getElementById('social-dropdown-menu');
+      const dropdownContainer = document.getElementById('social-dropdown-container');
+
+      if (dropdownBtn && dropdownMenu && dropdownContainer) {
+          dropdownBtn.addEventListener('click', (event) => {
+              event.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
+              dropdownMenu.classList.toggle('hidden');
+          });
+
+          // Đóng menu khi click ra ngoài
+          window.addEventListener('click', (event) => {
+              if (!dropdownContainer.contains(event.target)) {
+                  dropdownMenu.classList.add('hidden');
+              }
+          });
+      }
     });
   </script>
 </body>
