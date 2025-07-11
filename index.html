@@ -1,1201 +1,284 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Trang Chủ - Thiền Sư Tịnh Quang</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <style>
-    body {
-      background: linear-gradient(135deg, #3a86ff, #8338ec);
-      color: #f0f0f0;
-      position: relative;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    .animated-button {
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .animated-button:hover {
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    }
-    .animated-button:active {
-      transform: translateY(1px) scale(0.98);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .shake:hover {
-      animation: shake 0.3s ease-in-out;
-    }
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-3px); }
-      50% { transform: translateX(3px); }
-      75% { transform: translateX(-2px); }
-      100% { transform: translateX(0); }
-    }
-    .quote-transition {
-      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-      /* Đã xóa 'display: inline-block' để đảm bảo căn giữa chính xác */
-    }
-    .quote-transition.fade-out {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    .quote-transition.fade-in {
-      opacity: 1;
-      transform: scale(1);
-    }
-    .light-flare {
-      position: relative;
-      z-index: 1;
-    }
-    .light-flare::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 300%;
-      height: 300%;
-      background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
-      transform: translate(-50%, -50%) scale(0);
-      opacity: 0;
-      transition: transform 1.2s ease, opacity 1.2s ease;
-      pointer-events: none;
-      z-index: -1;
-      border-radius: 50%;
-    }
-    .flare-active::after {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minh Sư Tinh Quang - Các Nền Tảng</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải Font Inter từ Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Sử dụng font Inter làm font chữ mặc định */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Chặn cuộn ngang khi vuốt */
+            overflow-x: hidden;
+        }
 
-    /* Hiệu ứng mưa phùn nhẹ */
-    .rain-container {
-      pointer-events: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .raindrop {
-      position: absolute;
-      top: -10px;
-      background: radial-gradient(circle, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.15) 80%);
-      border-radius: 50%;
-      filter: drop-shadow(0 0 2px #fff);
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-      animation-name: fall;
-      opacity: 0.6;
-    }
-    /* Tạo hiệu ứng gió (dịch ngang nhẹ) */
-    @keyframes fall {
-      0% {
-        transform: translateX(0) translateY(0) scaleX(0.5);
-        opacity: 1;
-        filter: drop-shadow(0 0 3px #fff);
-      }
-      50% {
-        transform: translateX(calc(var(--wind) * 10px)) translateY(50vh) scaleX(1);
-        opacity: 0.8;
-        filter: drop-shadow(0 0 6px #ccf);
-      }
-      100% {
-        transform: translateX(calc(var(--wind) * 20px)) translateY(100vh) scaleX(0.7);
-        opacity: 0;
-        filter: drop-shadow(0 0 1px #88f);
-      }
-    }
-    /* Thêm bóng đổ cho chữ màu vàng để dễ đọc hơn */
-    #quote {
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-    }
-  </style>
-</head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
-  <div class="max-w-5xl w-full" style="position: relative; z-index: 10;">
-    <header class="text-center">
-      <h1 class="text-4xl font-bold mb-2">Thiền Sư Tịnh Quang</h1>
-      <p class="text-lg mb-2">Chào mừng quý đạo hữu đến với khuôn viên tâm linh</p>
-    </header>
+        /* Keyframes cho hiệu ứng "thở" của tiêu đề */
+        @keyframes breath {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+        .breathing-text {
+            animation: breath 4s ease-in-out infinite;
+        }
 
-    <blockquote id="quote" class="italic text-2xl text-yellow-400 quote-transition text-center my-12 min-h-[8rem] flex items-center justify-center">“Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong”</blockquote>
+        /* Keyframes cho hiệu ứng "bung tỏa sáng" khi chữ xuất hiện */
+        @keyframes bloomIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+                text-shadow: none;
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.02);
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.7), 0 0 8px rgba(255, 255, 255, 0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                text-shadow: none;
+            }
+        }
 
-    <!-- Khu vực nội dung tâm linh -->
-    <section>
-      <h2 class="text-2xl font-semibold mb-4 text-center">Kho tàng nội dung</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a href="https://thiensutinhquang.github.io/Playlist-YouTube/" class="bg-yellow-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-yellow-600 animated-button shake">Xem Video</a>
-        <a href="https://thiensutinhquang.github.io/playtholientuc/" class="bg-green-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-green-600 animated-button shake">Kho Thơ</a>
-        <a href="https://thiensutinhquang.github.io/PlayMusic/" class="bg-purple-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-purple-600 animated-button shake">Kho Nhạc</a>
-        <a href="https://thiensutinhquang.github.io/GiaoLy/" class="bg-pink-500 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-pink-600 animated-button shake">Giáo Lý</a>
-        <a href="https://thiensutinhquang.github.io/Admin/docnoidung.html" class="bg-gray-700 text-white py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-gray-800 animated-button shake">Các công cụ BLV</a>
+        /* Keyframes cho hiệu ứng mờ đi */
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        /* Lớp để áp dụng các animation */
+        .quote-text {
+            opacity: 0; /* Bắt đầu với trạng thái ẩn */
+        }
+        .animate-bloom-in {
+            animation: bloomIn 1.5s ease-out forwards;
+        }
+        .animate-fade-out {
+            animation: fadeOut 1s ease-in forwards;
+        }
+
+        /* Hiệu ứng khi nhấn nút */
+        .btn-press {
+            transition: transform 0.1s ease;
+        }
+        .btn-press:active {
+            transform: scale(0.95);
+        }
         
-        <!-- Menu xổ xuống cho Mạng xã hội -->
-        <div class="relative" id="social-dropdown-container">
-            <button id="social-dropdown-btn" class="bg-blue-500 text-white w-full py-4 px-6 rounded-2xl shadow-lg text-center hover:bg-blue-600 animated-button shake">
-                Kết nối
-            </button>
-            <div id="social-dropdown-menu" class="hidden absolute bottom-full mb-2 w-full bg-white rounded-2xl shadow-2xl p-2 z-20">
-                <div class="flex flex-col gap-2">
-                    <a href="https://www.youtube.com/@ThiensuTinhQuang" target="_blank" class="block text-red-600 font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">YouTube</a>
-                    <a href="https://www.tiktok.com/@thiensutinhquang" target="_blank" class="block text-black font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">TikTok</a>
-                    <a href="https://www.facebook.com/groups/minhsutinhquang" target="_blank" class="block text-blue-600 font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">Facebook</a>
-                    <a href="https://t.me/thiensutinhquang" target="_blank" class="block text-cyan-600 font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">Telegram</a>
-                    <a href="https://zalo.me/g/dukrae245" target="_blank" class="block text-blue-500 font-semibold py-3 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">Zalo</a>
-                </div>
+        /* Đảm bảo khu vực vuốt không chọn văn bản */
+        #quote-container {
+            user-select: none;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+ */
+        }
+    </style>
+
+</head>
+<body class="bg-gradient-to-r from-orange-400 to-yellow-500 min-h-screen flex items-center justify-center p-4 relative">
+    
+    <!-- Menu Overlay cho di động (ban đầu bị ẩn) -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex-col items-center justify-center text-white text-2xl space-y-8 hidden">
+        <button id="close-menu-btn" class="absolute top-8 right-8 text-4xl">×</button>
+        <a href="https://thiensutinhquang.github.io/home/" target="_blank" class="hover:text-orange-400">TRANG CHỦ</a>
+        <h3 class="text-orange-400 pt-4">CÁC NỀN TẢNG</h3>
+        <a href="https://www.youtube.com/@ThiensuTinhQuang" target="_blank" class="hover:text-orange-400">YouTube</a>
+        <a href="https://www.tiktok.com/@thiensutinhquang" target="_blank" class="hover:text-orange-400">TikTok</a>
+        <a href="https://www.facebook.com/groups/minhsutinhquang" target="_blank" class="hover:text-orange-400">Facebook</a>
+        <a href="https://t.me/thiensutinhquang" target="_blank" class="hover:text-orange-400">Telegram</a>
+        <a href="https://zalo.me/g/vjkhzt168" target="_blank" class="hover:text-orange-400">Zalo</a>
+    </div>
+
+    <!-- Nút Hamburger Menu (chỉ hiện trên di động) -->
+    <button id="hamburger-btn" class="md:hidden fixed top-6 right-6 z-40 text-white">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+    </button>
+
+    <!-- Container chính -->
+    <div class="text-center text-white w-full max-w-4xl mx-auto">
+
+        <!-- Logo -->
+        <img src="https://raw.githubusercontent.com/thiensutinhquang/Admin/main/icons/icon.png" alt="Logo Minh Sư Tinh Quang" class="mx-auto mb-6 w-20 h-20 md:w-24 md:h-24 rounded-full shadow-lg" onerror="this.onerror=null;this.src='https://placehold.co/96x96/f97316/ffffff?text=Logo';">
+
+        <!-- Menu điều hướng trên máy tính (ẩn trên di động) -->
+        <nav class="hidden md:flex flex-wrap items-center justify-center gap-3 mb-10">
+            <a href="https://thiensutinhquang.github.io/home/" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">TRANG CHỦ</a>
+            <a href="https://www.youtube.com/@ThiensuTinhQuang" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">YOUTUBE</a>
+            <a href="https://www.tiktok.com/@thiensutinhquang" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">TIKTOK</a>
+            <a href="https://www.facebook.com/groups/minhsutinhquang" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">FACE</a>
+            <a href="https://t.me/thiensutinhquang" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">TELE</a>
+            <a href="https://zalo.me/g/vjkhzt168" target="_blank" class="px-5 py-2 border-2 border-white rounded-full hover:bg-white hover:text-orange-500 transition-colors duration-300 btn-press">ZALO</a>
+        </nav>
+
+        <!-- Tiêu đề chính -->
+        <h1 class="text-3xl md:text-5xl font-bold tracking-wider mb-6 breathing-text">
+            TRANG NÀY ĐANG PHÁT TRIỂN
+        </h1>
+        
+        <!-- Khu vực hiển thị các dòng chữ luân phiên (có thể vuốt) -->
+        <div id="quote-container" class="mt-6 text-lg md:text-xl font-light min-h-[150px] flex flex-col items-center justify-center px-2 cursor-pointer">
+            <p id="quote-display" class="quote-text"></p>
+            <p class="text-xs text-white/50 mt-4 md:hidden">(Vuốt để đổi)</p>
+        </div>
+
+        <!-- ========== BẮT ĐẦU KHU VỰC GIÁO LÝ ========== -->
+        <div class="mt-12 w-full px-4">
+            <!-- Tiêu đề cho mục mới -->
+            <h2 class="text-2xl md:text-3xl font-semibold mb-6">GIÁO LÝ</h2>
+            
+            <!-- Lưới chứa các link, tự động điều chỉnh theo kích thước màn hình -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- Link 1: Giới Thiệu -->
+                <a href="https://thiensutinhquang.github.io/GiaoLy/gioithieu.html" target="_blank" class="block bg-white/20 p-4 rounded-lg text-white font-medium text-center hover:bg-white/30 transition-all duration-300 btn-press">
+                    Giới Thiệu
+                </a>
+
+                <!-- Link 2: Giới Luật -->
+                <a href="https://thiensutinhquang.github.io/GiaoLy/gioiluat.html" target="_blank" class="block bg-white/20 p-4 rounded-lg text-white font-medium text-center hover:bg-white/30 transition-all duration-300 btn-press">
+                    Giới Luật
+                </a>
+
+                <!-- Link 3: Bài Tập Thể Dục -->
+                <a href="https://thiensutinhquang.github.io/GiaoLy/baitaptheduc.html" target="_blank" class="block bg-white/20 p-4 rounded-lg text-white font-medium text-center hover:bg-white/30 transition-all duration-300 btn-press">
+                    Bài Tập Thể Dục
+                </a>
+
+                <!-- Link 4: Bạn Nên Biết -->
+                <a href="https://thiensutinhquang.github.io/GiaoLy/bannenbiet.html" target="_blank" class="block bg-white/20 p-4 rounded-lg text-white font-medium text-center hover:bg-white/30 transition-all duration-300 btn-press">
+                    Bạn Nên Biết
+                </a>
+
+                <!-- SAO CHÉP VÀ DÁN VÀO ĐÂY ĐỂ THÊM LINK MỚI -->
+                <!-- Ví dụ link 5 (chưa có thật) -->
+                <!-- 
+                <a href="#" target="_blank" class="block bg-white/20 p-4 rounded-lg text-white font-medium text-center hover:bg-white/30 transition-all duration-300 btn-press">
+                    Bài Học 1
+                </a>
+                -->
+
             </div>
         </div>
-      </div>
-    </section>
+        <!-- ========== KẾT THÚC KHU VỰC GIÁO LÝ ========== -->
 
-    <footer class="mt-12 text-center text-sm text-gray-300">
-      &copy; 2025 Thiền Sư Tịnh Quang. Tất cả các quyền được bảo lưu.
-    </footer>
-  </div>
+        <!-- Các nút bấm lớn -->
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4 mt-8">
+            <a href="https://thiensutinhquang.github.io/PlayMusic/" target="_blank" class="w-full md:w-auto bg-white text-orange-500 font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-orange-100 transition-colors duration-300 btn-press">NGHE NHẠC</a>
+            <a href="https://thiensutinhquang.github.io/playtholientuc/" target="_blank" class="w-full md:w-auto bg-white text-orange-500 font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-orange-100 transition-colors duration-300 btn-press">NGHE KHO THƠ</a>
+            <a href="https://thiensutinhquang.github.io/Playlist-YouTube/" target="_blank" class="w-full md:w-auto bg-white text-orange-500 font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-orange-100 transition-colors duration-300 btn-press">XEM VIDEO</a>
+        </div>
+    </div>
 
-  <audio id="quoteSound" src="https://thiensutinhquang.github.io/home/chuong.mp3" preload="auto"></audio>
+    <script>
+        // --- Logic cho menu Hamburger ---
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-  <!-- Hiệu ứng mưa phùn -->
-  <div class="rain-container" aria-hidden="true"></div>
+        hamburgerBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            mobileMenu.classList.add('flex');
+        });
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // Tạo giọt mưa
-      const rainContainer = document.querySelector('.rain-container');
-      const dropsCount = 80;
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('flex');
+        });
 
-      for(let i = 0; i < dropsCount; i++) {
-        const drop = document.createElement('div');
-        drop.classList.add('raindrop');
-        const width = Math.random() * 2 + 1;
-        drop.style.width = width + 'px';
-        drop.style.height = (width * 4 + Math.random() * 6) + 'px';
-        drop.style.left = Math.random() * 100 + 'vw';
-        drop.style.animationDuration = (Math.random() * 3 + 4) + 's';
-        drop.style.animationDelay = Math.random() * 7 + 's';
-        drop.style.setProperty('--wind', (Math.random() * 2 - 1).toFixed(2));
-        rainContainer.appendChild(drop);
-      }
+        // --- Logic cho các dòng chữ luân phiên và vuốt ---
+        const quotes = [
+            "Bản chất của Thượng Đế là sự sáng suốt, vô hạn,<br>không bị giới hạn bởi không gian và thời gian.",
+            "Mỗi con người đều mang trong mình một phần của Thượng Đế<br>(Phật Tính, Tánh Biết, Sự Sáng Suốt).",
+            "Bản ngã (cái tôi cá nhân) là phần của chúng ta bị đồng hóa với những từ trường tiêu cực<br>(tham, sân, si, sợ hãi, lo lắng).",
+            "Thực hành quan sát suy nghĩ, cảm xúc<br>mà không bị cuốn theo hay đồng hóa với chúng.",
+            "Khi gặp khó khăn, hãy xem đó là cơ hội<br>để học hỏi và trưởng thành.",
+            "Hiểu rằng mọi sự vật, hiện tượng, con người<br>đều là biểu hiện của Thượng Đế.",
+            "Không Có Sự Phân Chia Thực Sự<br>(Thiện Ác, Phật/Ma là Vai Diễn)",
+            "Nguồn Gốc Sự Sống,<br>Sự Sống Khắp Vũ Trụ",
+            "Bí Quyết Vượt Qua Cửa Tử:<br>Bình Tĩnh Quan Sát, Hít Thở Sâu (21 Phút),<br>Niệm Chú Thành Tâm, Tập Thể Dục Tại Chỗ (10 Phút)",
+            "Hóa Giải Suy Nghĩ Miên Man:<br>Thiền Quan Sát Tạp Niệm, Không Đồng Hóa, Không Sợ Hãi.<br>Sống Tỉnh Thức"
+        ];
+        
+        const quoteDisplay = document.getElementById('quote-display');
+        let currentQuoteIndex = 0;
+        let quoteInterval;
 
-      // --- LOGIC MỚI CHO HIỂN THỊ CÂU NÓI ---
-      const quotes = [
-        "Trực chỉ nhân tâm, kiến tánh thành Phật – khai sáng từ bên trong",
-        "Hãy biến hôm nay thành một ngày tuyệt vời nhé. Đừng quên hãy thường niệm. \"Mình là phật, mình thấy ai ai cũng là phật, như Đức Phật Thích Ca.\"",
-        "Hãy cảm ơn tất cả và yêu thương tất cả",
-        "Về nhà thôi, Mình là ai",
-        "Tinh tấn tu hành, thắng chính mình",
-        "Khảo là phải dùng trí huệ, sống tốt trong hiện tại",
-        "Đức tin tuyệt đối nhưng phải quán chiếu dùng trí huệ",
-        "Nhận thức được vị phật bên trong mình",
-        "Minh sư đã đi qua hết rồi giờ quay lại chỉ rõ để không bị lạc",
-        "Tu là sửa mình, không sửa người.",
-        "Hãy nhìn lỗi mình để học và sửa.",
-        "Người tu tốt chỉ thấy lỗi mình.",
-        "Khiêm nhường thì tâm sẽ an.",
-        "Ai cũng cần tự sửa đổi.",
-        "Thấy sai thì nhận, thấy đúng thì làm.",
-        "Chấp nhận mọi chuyện đến với lòng nhẹ nhàng.",
-        "Biết ơn cuộc đời này.",
-        "Sống với Tánh Biết, Tánh Thấy, Tánh Nghe.",
-        "Làm chủ lời nói và hành động.",
-        "Đừng đồng hóa mình với thân xác.",
-        "Bản ngã là gốc rễ của đau khổ.",
-        "Giữ tâm khiêm nhường và bao dung.",
-        "Quan sát cảm xúc để nó tự đến và đi.",
-        "Không chạy theo những ý nghĩ tiêu cực.",
-        "Hãy suy nghĩ kỹ trước khi nói.",
-        "Nói lời mang lại hiểu và thương.",
-        "Chỉ nói điều mình thật hiểu.",
-        "Giữ bí mật nếu không có lợi ích.",
-        "Cầu nguyện với lòng chân thành.",
-        "Niệm lời biết ơn tất cả.",
-        "Niệm yêu thương tất cả.",
-        "Sống chậm lại để thưởng thức hiện tại.",
-        "Đừng để quá khứ và tương lai làm phiền.",
-        "Viết ra dự định để lòng bình an.",
-        "Học hỏi mọi người, ai cũng là thầy.",
-        "Thất bại là bài học quý giá.",
-        "Hãy vui với những trải nghiệm.",
-        "Đừng so sánh hay hơn thua.",
-        "Khiêm tốn là sức mạnh của người tu.",
-        "Tôn kính Tam Bảo để tự soi mình.",
-        "Giữ giới để sống trong an vui.",
-        "Tránh sát sanh, trộm cắp, tà dâm.",
-        "Hạn chế rượu và các chất gây nghiện.",
-        "Tránh nói dối gây hại người khác.",
-        "Sống hòa ái, yêu thương gia đình.",
-        "Tôn trọng cha mẹ, ông bà, tổ tiên.",
-        "Tôn trọng pháp luật và lệ làng.",
-        "“Nhập gia tùy tục” để hòa đồng.",
-        "Tất cả tôn giáo đều hướng thiện.",
-        "Đừng phân biệt đạo này đạo kia.",
-        "Tất cả giờ đều tốt để tu hành.",
-        "Ngày nào cũng là ngày tốt.",
-        "Hướng nào cũng là hướng lành.",
-        "Tránh mê tín, bỏ chấp trước.",
-        "Thân người khó được, hãy trân trọng.",
-        "Luôn biết ơn những gì đang có.",
-        "Cúng dường đồ ăn với lòng thành.",
-        "Ăn uống trong sự biết ơn.",
-        "Khi yêu hãy yêu trọn vẹn và chân thành.",
-        "Giữ lòng chung thủy vợ chồng.",
-        "Hãy sống thật với chính mình.",
-        "Sửa mình mỗi ngày để tốt hơn.",
-        "Sống với hiện tại ở đây và bây giờ.",
-        "Hãy buông bỏ những gì làm mình khổ.",
-        "Không ôm giữ hận thù trong lòng.",
-        "Tha thứ cho người là tự tha thứ cho mình.",
-        "Giúp người là giúp chính mình.",
-        "Không chấp đúng sai, nhưng luôn sáng suốt.",
-        "Biết rõ điều tốt và điều xấu.",
-        "Hãy lựa lời mà nói.",
-        "Đừng làm người khác đau lòng.",
-        "Xin lỗi nếu lỡ gây tổn thương.",
-        "Tu khẩu để giữ hòa khí.",
-        "Quan sát tâm để làm chủ mình.",
-        "Không tranh hơn thua vô ích.",
-        "Giữ tâm an thì bệnh cũng hết.",
-        "Mở lòng học hỏi điều hay.",
-        "Học cái hay để làm tốt hơn.",
-        "Biết sàng lọc và sáng tạo.",
-        "Người khác làm được thì mình cũng làm được.",
-        "Thất bại là mẹ của thành công.",
-        "Giữ đức tin để sống thiện.",
-        "Thượng Đế ở trong và ngoài ta.",
-        "Trò chuyện với Thượng Đế trong lòng mình.",
-        "Thượng Đế là tiếng cười và niềm vui.",
-        "Tu thiền để quay vào Tánh Biết.",
-        "Hít thở sâu để thân và tâm an.",
-        "Thiền là sống hết mình trong việc đang làm.",
-        "Ăn thì ăn hết lòng.",
-        "Làm thì làm hết lòng.",
-        "Chơi thì chơi hết mình.",
-        "Yêu thì yêu hết mình.",
-        "Tập thể dục mỗi ngày để khỏe mạnh.",
-        "Giữ thân khỏe để tâm an.",
-        "Thực hành mỗi ngày để tâm sáng.",
-        "Nhớ rằng tu là rèn mình mỗi ngày.",
-        "Giữ tâm trong sáng thì trí tuệ mở ra.",
-        "Không phán xét người khác.",
-        "Không áp đặt ý của mình lên người.",
-        "Biết lắng nghe để hiểu hơn.",
-        "Biết ơn người đã giúp đỡ mình.",
-        "Biết ơn cả những ai từng làm mình buồn.",
-        "Cầu chúc mọi người an vui.",
-        "Cầu chúc người khác được hạnh phúc.",
-        "Gửi lời lành thay vì lời oán trách.",
-        "Hãy tập cười mỗi ngày.",
-        "Giữ gương mặt hiền hòa dễ gần.",
-        "Chọn nói lời khích lệ.",
-        "Chọn im lặng khi cần thiết.",
-        "Hiểu người trước khi muốn người hiểu mình.",
-        "Không tự cao tự đại.",
-        "Không xem thường ai.",
-        "Không đổ thừa cho số phận.",
-        "Không đổ lỗi cho người khác.",
-        "Chấp nhận để nhẹ lòng.",
-        "Buông xả để tự do.",
-        "Sống đơn giản để lòng thanh thản.",
-        "Nhường nhịn để giữ hòa khí.",
-        "Biết dừng lại khi cần.",
-        "Biết tiến lên khi đúng lúc.",
-        "Biết từ chối điều không tốt.",
-        "Giữ lòng nhân hậu dù đời bạc bẽo.",
-        "Hãy soi mình trước khi soi người.",
-        "Giữ mình thanh tịnh giữa đời động.",
-        "Sống thiện để gieo nhân lành.",
-        "Làm việc lành để tích phước đức.",
-        "Cầu cho mình và người đều an.",
-        "Thực hành giới luật để tự cứu mình.",
-        "Thương mình chính là thương người.",
-        "Thương người chính là thương mình.",
-        "Biết ơn đời sống hiện tại.",
-        "Đời người vô thường, hãy trân quý.",
-        "Sống sao để không hối tiếc.",
-        "Cho đi niềm vui thì nhận lại an vui.",
-        "Cho đi hiểu biết thì nhận lại trí tuệ.",
-        "Làm phước không cầu báo đáp.",
-        "Giúp người không cần ghi ơn.",
-        "Hiểu luật nhân quả để sống ngay thẳng.",
-        "Không gieo ác thì không gặt khổ.",
-        "Lời nói nên ấm áp như nắng mai.",
-        "Ánh mắt nên hiền hòa như suối mát.",
-        "Gặp ai cũng mỉm cười chào hỏi.",
-        "Biết lắng nghe không cắt lời người.",
-        "Nói ít để nghe nhiều.",
-        "Nghe nhiều để hiểu sâu.",
-        "Sống chậm để cảm nhận đời.",
-        "Không vội vàng hấp tấp mà hỏng việc.",
-        "Biết nhịn để thắng chính mình.",
-        "Biết đủ để không tham.",
-        "Biết buông để nhẹ lòng.",
-        "Thà thua mà vui hơn thắng mà khổ.",
-        "Gương mặt vui thì lòng cũng an.",
-        "Đem ánh sáng đến nơi tối tăm.",
-        "Đem hy vọng đến nơi buồn đau.",
-        "Gieo niềm tin nơi mất niềm tin.",
-        "Mang yêu thương đến nơi hận thù.",
-        "Đem bình an vào nơi tranh chấp.",
-        "Chọn lặng yên thay vì cãi vã.",
-        "Chọn lắng nghe thay vì phán xét.",
-        "Chọn tha thứ thay vì oán hận.",
-        "Chọn tin tưởng thay vì nghi ngờ.",
-        "Chọn yêu thương thay vì lạnh lùng.",
-        "Thắp sáng niềm vui trong gia đình.",
-        "Giữ ấm tình thân qua lời hỏi han.",
-        "Thường nhớ gọi điện cho người thân.",
-        "Hãy xin lỗi khi làm ai buồn.",
-        "Hãy cảm ơn khi ai giúp mình.",
-        "Hãy chia sẻ khi ai cần nghe.",
-        "Hãy im lặng khi lời nói vô nghĩa.",
-        "Hãy mỉm cười để cuộc đời bớt căng.",
-        "Hãy dịu dàng để làm lành vết thương.",
-        "Hãy trung thực để xây niềm tin.",
-        "Hãy rộng lượng để được tự do.",
-        "Hãy kiên nhẫn để vượt khó khăn.",
-        "Hãy dũng cảm để nhận lỗi sai.",
-        "Hãy bền bỉ để đạt mục tiêu.",
-        "Hãy tự tin nhưng không kiêu ngạo.",
-        "Hãy khiêm tốn để được yêu quý.",
-        "Hãy nhẹ nhàng trong cách sống.",
-        "Hãy cứng rắn trong nguyên tắc.",
-        "Hãy sống thật, không giả dối.",
-        "Hãy giúp người mà không kể công.",
-        "Hãy vui vẻ với điều đang có.",
-        "Hãy vững vàng trong nghịch cảnh.",
-        "Hãy tự tại giữa được mất.",
-        "Hãy an nhiên giữa khen chê.",
-        "Hãy bình tĩnh giữa xáo động.",
-        "Hãy tỉnh thức giữa mê muội.",
-        "Hãy sáng suốt giữa lợi danh.",
-        "Hãy nhân hậu giữa khắc nghiệt.",
-        "Hãy ấm áp giữa lạnh lùng.",
-        "Hãy chân thành giữa giả tạo.",
-        "Hãy kiên trì trong tu học.",
-        "Hãy rèn luyện mỗi ngày.",
-        "Hãy làm gương cho người khác.",
-        "Hãy giữ trọn lời hứa.",
-        "Hãy giữ trọn niềm tin.",
-        "Hãy gieo hạt lành mỗi ngày.",
-        "Hãy trồng cây thiện trong lòng.",
-        "Hãy tưới nước hiểu và thương.",
-        "Hãy chăm sóc hạnh phúc gia đình.",
-        "Hãy nuôi lớn tình huynh đệ.",
-        "Hãy rộng mở với bạn bè.",
-        "Hãy san sẻ cùng cộng đồng.",
-        "Hãy nghĩ điều thiện, nói điều lành, làm điều tốt.",
-        "Hãy làm người nhẹ lòng, nhẹ lời, nhẹ bước.",
-        "Hãy nhớ rằng ai cũng muốn được yêu thương.",
-        "Hãy là người đầu tiên nói lời xin lỗi.",
-        "Hãy là người sau cùng giữ lòng hận.",
-        "Hãy là người đem lại niềm tin.",
-        "Hãy là người thắp sáng niềm vui.",
-        "Hãy là người làm nhẹ nỗi buồn.",
-        "Hãy là người gợi mở hy vọng.",
-        "Hãy là người gieo mầm thiện lành.",
-        "Hãy là người xây đắp bình an.",
-        "Hãy nhìn sâu vào lỗi của chính mình trước khi trách người khác, vì khi ta sửa mình thì cuộc đời tự nhiên sẽ tốt đẹp hơn.",
-        "Đừng để cái tôi và sự kiêu ngạo che mắt con, hãy học cách cúi đầu khiêm nhường để thấy mọi người đều là thầy của mình.",
-        "Khi con gặp chuyện không như ý, hãy chấp nhận ngay từ giây đầu tiên và tự hỏi: “Ta học được gì từ đây?” thay vì than trách cuộc đời.",
-        "Người tu hành thật sự không phải là người hay dạy người khác sửa, mà là người luôn lặng lẽ tự sửa chính mình.",
-        "Sống ở đời phải biết nhẫn nhịn và nhường nhịn, vì tranh hơn thua chỉ chuốc thêm phiền não cho cả hai bên.",
-        "Khi lòng con nhẹ, mọi thứ đều nhẹ; khi lòng con nặng, mọi chuyện nhỏ cũng hóa thành gánh nặng.",
-        "Nếu muốn người khác tin yêu và kính trọng con, trước hết con hãy biết giữ lời hứa và giữ lời nói đúng mực.",
-        "Ai cũng có lúc phạm sai lầm, điều quan trọng là ta dám nhận lỗi và sửa đổi để trở nên tốt hơn.",
-        "Thà lặng im mà giữ được hòa khí, còn hơn nói ra những lời làm tổn thương khiến tình nghĩa đứt gãy.",
-        "Con hãy luôn tự hỏi: “Điều ta nói và làm có mang lại an vui cho người không?” – đó là gốc của từ bi và trí tuệ.",
-        "Người hiểu Đạo là người có thể cười được với chính lỗi lầm của mình, vì họ biết đó là cơ hội để tiến bộ.",
-        "Đừng quá khắt khe với bản thân mà sinh ra buồn khổ, nhưng cũng đừng dễ dãi với mình mà quên mất rèn luyện.",
-        "Khi con làm điều thiện, đừng mong cầu báo đáp, vì phước đức thật sự nằm ở tâm ý thanh thản và lòng nhẹ nhàng sau đó.",
-        "Giận dữ như ngọn lửa thiêu đốt công đức của chính mình, hãy học cách dập tắt nó bằng hiểu biết và thương yêu.",
-        "Thật dễ để chê trách người, nhưng thật khó để hiểu hết nỗi khổ và lý do đằng sau việc họ làm.",
-        "Khi con thấy lỗi của người, hãy lấy đó làm bài học nhắc nhở mình – nhờ vậy họ cũng trở thành thầy của con.",
-        "Đừng để những lời khen làm con tự mãn, cũng đừng để lời chê làm con thối chí – cứ kiên trì mà đi con đường đúng.",
-        "Người biết tự trọng thì không cần phải khoe khoang; người thật lòng khiêm nhường thì không cần phải giả vờ khiêm tốn.",
-        "Con hãy tu hành để giữ cho tâm mình vững như núi, không bị gió khen chê, được mất, hơn thua làm lay động.",
-        "Hãy hiểu rằng người ta không làm mình khổ, chính cách mình đón nhận và giữ trong lòng mới làm mình đau.",
-        "Một lời nói ác có thể như mũi tên bắn vào tim người, hãy cẩn trọng và chỉ nói những lời mang lại bình an.",
-        "Đừng vì chút lợi trước mắt mà đánh đổi đạo đức lâu dài, vì khi mất lòng tin thì rất khó lấy lại.",
-        "Con có thể thông minh, nhưng hãy để trí tuệ dẫn dắt lòng từ bi để không làm tổn thương người khác.",
-        "Không ai sống thay con được, cũng không ai tu thay con được, mọi thứ đều bắt đầu từ sự chọn lựa của chính con.",
-        "Khi con thành thật xin lỗi và sửa đổi, đó không phải là nhục mà là dũng khí và trí tuệ của bậc tu hành.",
-        "Nếu muốn được yên vui thì hãy tập cho mình thói quen nghĩ điều thiện, nói điều lành và làm việc tốt mỗi ngày.",
-        "Đừng xem thường việc thiện nhỏ mà không làm, cũng đừng xem nhẹ việc ác nhỏ mà cho phép mình phạm phải.",
-        "Mỗi sáng thức dậy, hãy nhớ biết ơn vì còn sống, còn cơ hội để yêu thương, học hỏi và làm điều thiện.",
-        "Mỗi tối trước khi ngủ, hãy tự hỏi hôm nay mình đã làm được gì tốt cho người khác chưa.",
-        "Hãy nhớ rằng tất cả lời nói, hành động và ý nghĩ của con đều là hạt giống, sẽ trổ quả trong tương lai.",
-        "Con không thể thay đổi ai được, nhưng con có thể thay đổi chính mình để làm tấm gương tốt.",
-        "Khi gặp người nóng giận, hãy giữ lòng mát mẻ như nước để không làm ngọn lửa bùng lên.",
-        "Người khôn ngoan không phải người biết nói cho người ta thua, mà là người khiến người ta nghe mà chịu hiểu.",
-        "Thà chậm mà chắc còn hơn nhanh mà hấp tấp; thà im lặng mà sâu sắc còn hơn nói nhiều mà vô nghĩa.",
-        "Đời sống rất ngắn, đừng lãng phí nó để tranh cãi, hờn giận hay nuôi hận thù.",
-        "Hãy tập thói quen mỉm cười, vì nụ cười là chiếc cầu nối giữa hai tâm hồn.",
-        "Khi người ta xúc phạm con, hãy tự hỏi: “Điều họ nói có thật không?” Nếu thật thì sửa, nếu không thì bỏ qua.",
-        "Người có phước là người biết sống đúng lúc, nói đúng lời, làm đúng việc, giữ được tâm hiền hòa.",
-        "Ai cũng có nỗi khổ riêng, hãy đối xử nhẹ nhàng với nhau như cách con mong người khác đối xử với mình.",
-        "Sống giữa đời, điều quý nhất không phải là tiền bạc hay danh vọng mà là một tấm lòng an nhiên và nhân hậu.",
-        "Con hãy tự làm sáng lòng mình, đừng mong ai thắp đuốc cho con suốt cả đời.",
-        "Đừng mong thế gian sẽ luôn công bằng, nhưng hãy giữ cho lương tâm mình luôn trong sáng.",
-        "Người tu không tránh đời, mà sống giữa đời nhưng giữ tâm không bị đời làm đục.",
-        "Khi tâm con lắng lại, con sẽ thấy rõ điều thiện điều ác trong chính ý nghĩ mình.",
-        "Nếu muốn dạy ai điều gì, trước hết hãy sống điều đó để người nhìn vào mà tin tưởng.",
-        "Hãy sống để sau này nhìn lại, con thấy tự hào vì đã sống ngay thẳng và nhân từ.",
-        "Đừng cố thay đổi người khác theo ý mình, hãy cảm thông và để họ tự nhận ra mà thay đổi.",
-        "Hãy hiểu rằng ai cũng cần được lắng nghe, và ai cũng sợ bị phán xét.",
-        "Khi lòng con trong sáng thì nhìn đâu cũng thấy cơ hội để làm điều thiện.",
-        "Giữ gìn lời nói như giữ ngọc quý, vì lời đã nói ra không thể lấy lại.",
-        "Khi con giúp ai mà không mong đền đáp, đó mới là hạnh bố thí thanh tịnh.",
-        "Làm người quân tử thì không vì lợi nhỏ mà mất nghĩa lớn.",
-        "Hãy sống sao để người tin cậy, không phải sợ hãi.",
-        "Người có tâm rộng lớn thì chẳng so đo chuyện nhỏ.",
-        "Đời vốn vô thường, hãy quý trọng những người đang còn bên cạnh con.",
-        "Thay vì mong người hiểu con, hãy cố gắng hiểu họ trước.",
-        "Thương yêu người không phải vì họ xứng đáng, mà vì con chọn lòng nhân hậu.",
-        "Làm lành tránh dữ không phải để người khen, mà để lòng mình yên.",
-        "Giữ lời hứa là giữ chữ tín – mà chữ tín là vốn quý nhất của người tu.",
-        "Khi con đau lòng vì ai đó, hãy nhớ đã có lúc con cũng làm người khác đau.",
-        "Đừng để lời đồn thổi làm mất tình nghĩa, hãy tin ở chính sự quan sát và hiểu biết của mình.",
-        "Ai khen thì mừng nhưng đừng tự mãn; ai chê thì buồn nhưng đừng oán hận.",
-        "Con hãy nhớ: giàu có không mua được hạnh phúc, quyền lực không mua được tình thương.",
-        "Người quân tử tự nhắc mình chớ phạm lỗi, kẻ tiểu nhân tìm cách đổ lỗi cho người.",
-        "Hãy dạy lòng mình biết ơn mỗi điều nhỏ nhất.",
-        "Khi con biết dừng đúng lúc, sẽ tránh được nhiều hối tiếc.",
-        "Không ai có thể làm con khổ nếu con biết buông xả.",
-        "Đừng để một phút nóng giận phá hủy tình nghĩa cả đời.",
-        "Chọn sống tử tế không phải vì người khác xứng đáng mà vì con muốn giữ mình trong sáng.",
-        "Nếu không thể nói lời tốt đẹp, hãy im lặng để khỏi làm người khác buồn.",
-        "Sự kiên nhẫn hôm nay có thể cứu được mối quan hệ ngày mai.",
-        "Hãy dành thời gian cho người thương khi còn có thể, đừng để phải hối tiếc.",
-        "Ai cũng muốn được tôn trọng, vậy hãy bắt đầu từ việc tôn trọng người trước.",
-        "Hãy yêu thương vợ chồng, con cái, vì gia đình là nơi nương tựa vững chắc nhất.",
-        "Con có thể nghèo tiền của nhưng đừng nghèo lòng nhân ái.",
-        "Đừng chạy theo giàu sang mà quên mất cội nguồn đạo đức.",
-        "Giữ chữ tín thì lòng an, mất chữ tín thì lòng bất an.",
-        "Đừng vì một lời hứa hẹn hão mà đánh đổi sự thật.",
-        "Sống lạc quan để ánh mắt luôn có nụ cười.",
-        "Giữ tâm bình lặng để nhìn rõ mọi việc.",
-        "Thà nhận phần thiệt mà giữ được tình nghĩa.",
-        "Hãy chọn bạn mà chơi, chọn lời mà nói, chọn việc mà làm.",
-        "Dù ai đối đãi thế nào, con vẫn giữ mình trong sáng.",
-        "Khi con hiểu mình đủ, sẽ không còn cần khoe khoang.",
-        "Người càng hiểu đời càng nhẹ lời phán xét.",
-        "Sống thiện thì sợ gì đêm dài, sống ngay thì sợ gì người soi.",
-        "Hãy trân trọng tình bạn thật lòng, vì nó quý hơn vàng.",
-        "Ai cũng có lúc yếu đuối, hãy dịu dàng với nhau.",
-        "Khi con không còn so đo, lòng sẽ an nhiên.",
-        "Hãy nuôi dưỡng từ bi như ánh lửa sưởi ấm tim mình và người.",
-        "Khi lòng con bình yên, mọi sóng gió bên ngoài sẽ không còn làm con chao đảo.",
-        "Hãy tu tâm dưỡng tính như người trồng cây – kiên nhẫn chăm sóc mỗi ngày mới mong hái quả ngọt.",
-        "Đời người chỉ mấy mươi năm, đừng phí hoài nó để nuôi dưỡng hận thù.",
-        "Hãy học cách mỉm cười với khó khăn vì nó là bài học hóa trang, giúp ta trưởng thành.",
-        "Khi lời nói nhẹ như lông hồng, nó nâng lòng người lên; khi lời nói nặng như đá tảng, nó đè lòng người xuống.",
-        "Người khôn không hơn thua lời nói, người dại tranh từng câu chữ.",
-        "Muốn biết tâm mình sáng hay tối, hãy nhìn vào ý nghĩ mình nuôi dưỡng mỗi ngày.",
-        "Đừng làm giàu bằng cách nghèo đi lương tâm.",
-        "Hãy chọn lặng lẽ làm việc tốt hơn là ồn ào khoe việc thiện.",
-        "Con đừng mong người đời luôn hiểu mình – hãy sống sao để lương tâm hiểu mình trước.",
-        "Nếu con thấy người khác hơn mình mà không ganh tỵ – đó là khi con lớn lên trong tâm hồn.",
-        "Người biết sống đạo nghĩa là người luôn sợ làm người khác buồn lòng.",
-        "Ai giữ được tâm từ thì đi đâu cũng được thương mến.",
-        "Khi con dám nhận trách nhiệm, đó là lúc con trở nên vững chãi nhất.",
-        "Đời không như ý nhưng đừng vì vậy mà mất đi nhân cách.",
-        "Hãy coi mỗi thử thách như một vị thầy nghiêm khắc nhưng tận tâm.",
-        "Đừng chỉ mong cầu được yêu thương, hãy học cách làm người dễ thương.",
-        "Sống đơn giản để lòng nhẹ, sống tử tế để đời vui.",
-        "Khi còn trẻ hãy gieo điều thiện, về già sẽ gặt bình an.",
-        "Lời nói ra như mũi tên đã rời cung – hãy cân nhắc trước khi buông lời.",
-        "Ai có lòng rộng như biển, thì sóng đời không thể nhấn chìm họ.",
-        "Nếu không thể giúp người đừng khiến người buồn thêm.",
-        "Đời vốn dĩ khổ nhiều, đừng góp thêm nỗi khổ bằng lời cay nghiệt.",
-        "Được mất chỉ như mây bay, điều quan trọng là giữ lòng ngay thẳng.",
-        "Con đừng để danh lợi làm mờ mắt – nó có thể che khuất cả lối về lương tâm.",
-        "Ai thấu hiểu người khác chính là người khôn ngoan; ai hiểu được chính mình mới thật sự trí tuệ.",
-        "Hãy giữ tâm thiện lành ngay cả khi bị hiểu lầm.",
-        "Kẻ mạnh là kẻ biết kiềm chế mình khi nóng giận.",
-        "Hãy học cách đặt mình vào chỗ người khác đứng để hiểu nỗi khổ của họ.",
-        "Người khôn luôn lắng nghe, người dại luôn muốn nói cho hết.",
-        "Khi bị xúc phạm, đừng đáp lại bằng lời ác – im lặng là câu trả lời cao quý.",
-        "Đừng mong biến đổi người khác – hãy tự thay đổi mình để thấy thế giới khác đi.",
-        "Giữ lòng kiên nhẫn giống như giữ lửa trong đêm tối.",
-        "Đừng vì một lời đồn mà mất một người bạn.",
-        "Hãy làm cho đời con có ích, để khi rời đi không nuối tiếc.",
-        "Sống đừng để hối hận những điều đã làm, càng không hối tiếc những điều chưa kịp làm.",
-        "Mỗi người đều có nỗi đau riêng – hãy nhẹ tay với nhau.",
-        "Tình thương thật sự không đòi hỏi điều kiện.",
-        "Khi con biết chia sẻ nỗi buồn, nó vơi đi; khi con chia sẻ niềm vui, nó nhân lên.",
-        "Hãy để tâm an khi người khen, vững khi người chê.",
-        "Người đáng thương nhất là người không biết hổ thẹn khi làm điều sai.",
-        "Đừng để đồng tiền quyết định giá trị con người.",
-        "Ai nói lời thật thà mà vẫn dịu dàng, đó là người khôn ngoan.",
-        "Nếu muốn người khác tin, hãy làm cho lời nói và hành động của mình thống nhất.",
-        "Con không thể kiểm soát gió nhưng có thể điều chỉnh buồm.",
-        "Giữ tâm trong sáng mới nhìn đời rõ ràng.",
-        "Lỗi lớn nhất là thấy mình không còn lỗi nào để sửa.",
-        "Người biết đủ sẽ không khổ vì thiếu.",
-        "Đừng nhẫn nhịn đến mức nuốt giận thành bệnh, hãy hóa giải nó bằng hiểu và thương.",
-        "Giữ vững đạo đức như giữ mái nhà khỏi dột mưa.",
-        "Ai sống thật lòng thì chẳng sợ bị soi xét.",
-        "Khi người ta rời bỏ con, hãy để họ đi – buộc chặt người không thương mình chỉ làm khổ cả hai.",
-        "Khi làm điều tốt, đừng hỏi ai thấy; khi làm điều xấu, hãy hỏi lòng mình.",
-        "Đừng để lòng tham biến con thành kẻ nô lệ cho vật chất.",
-        "Khi bị hiểu lầm, hãy giải thích bằng việc làm, không phải lời nói.",
-        "Người có ơn đừng kể, người nhận ơn đừng quên.",
-        "Tha thứ không phải vì người xứng đáng mà vì lòng mình cần yên.",
-        "Kẻ thù lớn nhất của mình chính là cái tôi.",
-        "Khi chưa hiểu rõ ai, đừng vội phán xét.",
-        "Người biết sống vì người khác thì sống ở đâu cũng được quý trọng.",
-        "Khi làm cha mẹ, hãy nhớ: con học từ hành động chứ không chỉ lời nói của mình.",
-        "Khi làm thầy, hãy làm gương trước khi dạy lời hay.",
-        "Khi làm bạn, hãy trung thực và thủy chung.",
-        "Đừng hứa khi vui, đừng trả lời khi giận.",
-        "Tổn thương sâu nhất là lời nói vô tâm từ người ta tin cậy.",
-        "Tình thương thật sự không cần phô trương.",
-        "Hãy giữ cho lòng mình nhẹ như mây trắng, để đời bớt nặng nề.",
-        "Khi con hiểu được giá trị của giọt nước mắt, con sẽ biết trân trọng nụ cười.",
-        "Hãy chọn im lặng khi lời nói có thể làm người khác đau.",
-        "Ai gieo gió ắt gặt bão – sống đừng gieo oán để khỏi gặt hận.",
-        "Không ai hoàn hảo – hãy học cách chấp nhận thiếu sót của nhau.",
-        "Hãy dạy con lòng trắc ẩn trước khi dạy con làm giàu.",
-        "Khi được tôn trọng, đừng kiêu ngạo; khi bị xem thường, đừng oán hận.",
-        "Giữ lời hứa dù chỉ với một đứa trẻ.",
-        "Sống với ai cũng phải giữ lễ – vì lễ nghĩa là gốc của tình người.",
-        "Khi nhận ơn đừng quên báo đáp.",
-        "Đừng chờ người ta cần mới giúp, hãy giúp khi mình có thể.",
-        "Khi bị phản bội, đừng vội hận, hãy cảm ơn vì người đó dạy mình bài học quý giá.",
-        "Sống sao để đêm nằm xuống lòng không ray rứt.",
-        "Hãy chọn cho mình một nguyên tắc sống và kiên trì theo nó.",
-        "Nếu không đủ can đảm để xin lỗi, ít nhất đừng làm người khác đau thêm.",
-        "Chỉ cần một lời an ủi đúng lúc có thể cứu một linh hồn khỏi tuyệt vọng.",
-        "Hãy sống như đoá hoa, lặng lẽ tỏa hương mà không cần ai khen.",
-        "Lời nói là hạt giống – gieo lời lành sẽ gặt niềm tin.",
-        "Hãy tập quen với cô đơn để không tuyệt vọng khi người bỏ đi.",
-        "Đừng sợ thay đổi – sợ nhất là không dám thay đổi.",
-        "Người hiểu chuyện không cần giải thích nhiều.",
-        "Khi tâm thiện lành, đi đâu cũng thấy bạn.",
-        "Ai sống giả dối thì sợ nhất là sự thật.",
-        "Hãy đối đãi với người như cách con muốn người đối đãi với mình.",
-        "Sống tốt không cần ai biết, chỉ cần lòng mình biết.",
-        "Đừng để quá khứ trói buộc hiện tại.",
-        "Thời gian quý hơn tiền bạc – tiền mất còn tìm lại được, thời gian thì không.",
-        "Cách con đối xử với người yếu hơn con mới cho thấy phẩm chất thật.",
-        "Đừng đợi có tất cả rồi mới hạnh phúc – hãy hạnh phúc với những gì mình có.",
-        "Ai sống hiền lành thì trời thương đất độ.",
-        "Biết sợ nhân quả thì không dám làm ác.",
-        "Người tu không sợ nghèo, chỉ sợ lòng tham không đáy.",
-        "Hãy cho người khác một lối đi – đừng ép ai vào đường cùng.",
-        "Đừng xem thường những việc thiện nhỏ, chính nó vun đắp phước báu lớn.",
-        "Người quân tử xem lời nói như trọng lời thề.",
-        "Ai hay cười chê người khác thì khó thấy lỗi mình.",
-        "Sống đừng hẹp lòng – một chút rộng lượng giữ được trăm điều vui.",
-        "Đừng tìm người hoàn hảo – hãy học cách chấp nhận và yêu thương người thật.",
-        "Khi lòng con đủ rộng, mọi thứ đều nhỏ.",
-        "Ai gieo thiện thì gặt lành – đó là luật trời.",
-        "Hãy tự hỏi: “Điều này có làm ta hổ thẹn khi nhắc lại không?”",
-        "Đừng sống chỉ để người ta khen – hãy sống để khỏi ân hận.",
-        "Ai giữ được tín nghĩa thì giữ được lòng người.",
-        "Một ánh mắt cảm thông hơn trăm lời hoa mỹ.",
-        "Người hay xét lỗi người khác là người quên soi mình.",
-        "Khi con trân trọng người khác, con đang tự nâng giá trị chính mình.",
-        "Nếu không thể đem lại hạnh phúc, ít nhất đừng làm ai bất hạnh.",
-        "Giữ bình tĩnh là giữ được nửa chiến thắng.",
-        "Một cái nắm tay khi hoạn nạn quý hơn ngàn lời khi bình yên.",
-        "Hãy sống để khi nhắc đến tên mình, người ta mỉm cười.",
-        "Đừng mong đời dễ dàng – hãy mong mình vững vàng.",
-        "Hãy học cách vui với thành công của người khác.",
-        "Tình nghĩa như cây – muốn lớn cần chăm sóc, muốn bền cần gốc rễ.",
-        "Đừng để lòng kiêu hãnh ngăn cản lời xin lỗi.",
-        "Ai dám xin lỗi là người đủ lớn để yêu thương.",
-        "Hãy dạy con sống tử tế trước khi dạy con thành công.",
-        "Khi thấy mình nổi giận, hãy tự hỏi: “Điều này có xứng đáng không?”",
-        "Đừng vội tin lời khen, đừng quá buồn vì lời chê.",
-        "Một tấm lòng chân thật còn quý hơn trăm mưu kế.",
-        "Đời rất ngắn – hãy dùng nó để yêu thương thay vì oán ghét.",
-        "Đừng hứa điều không thể làm – hứa ít nhưng giữ trọn lời.",
-        "Ai cho đi nhiều thường là người giàu có nhất về tình thương.",
-        "Sống bao dung để khi già không cô độc.",
-        "Người hiểu nhiều thường nói ít.",
-        "Hãy sống như mặt trời – tự tỏa sáng mà không cần ai đốt lửa.",
-        "Tu là sửa, hành là làm – đừng chỉ nghĩ mà hãy đổi thay thật sự.",
-        "Người tu thật chỉ soi gương chính mình, không chỉ tay dạy thiên hạ.",
-        "Khi tâm con sáng, cả thế giới quanh con sẽ đổi màu.",
-        "Hãy dùng lỗi người làm gương soi lỗi mình.",
-        "Đừng sợ thấy lỗi mình – sợ nhất là không dám nhìn.",
-        "Càng thành tâm quán chiếu, càng nhận ra gốc rễ khổ đau.",
-        "Sống tỉnh thức là thấy rõ từng vọng niệm khởi lên mà không bị lôi kéo.",
-        "Tỉnh thức là làm chủ lời nói, động tác và ý nghĩ của chính mình.",
-        "Quan sát mà không phán xét – đó là bước đầu của tự do.",
-        "Hãy là người quan sát im lặng bên trong chính mình.",
-        "Bản ngã là chiếc mặt nạ, hãy tháo nó ra để thấy Thật Tâm.",
-        "Mỗi khi con muốn phán xét người, hãy quay vào tự hỏi: “Ta thật sạch chưa?”",
-        "Khiêm nhường không phải là tự hạ thấp, mà là tự hiểu giới hạn của mình.",
-        "Chớ để lời khen ru ngủ, chớ để lời chê thiêu đốt.",
-        "Đừng tìm Phật bên ngoài – Phật ở ngay trong tâm mà con chưa nhận ra.",
-        "Mọi vọng tưởng là mây, Tánh Biết là bầu trời.",
-        "Đừng bám chấp thân xác – nó chỉ là chiếc áo mượn.",
-        "Bản ngã chỉ sống khi ta nuôi nó bằng tranh giành và so đo.",
-        "Tâm con lặng thì mọi thứ tự an.",
-        "Hãy tập ngồi yên để nghe tiếng vọng trong lòng.",
-        "Người tu là người dám nhìn thẳng vào bóng tối trong tâm mình.",
-        "Hãy quán chiếu: “Ta từ đâu đến, đến đây để làm gì, rồi sẽ đi về đâu?”",
-        "Thấy được vô thường là thấy được tự do.",
-        "Khi biết chấp nhận ngay từ khoảnh khắc đầu tiên, con đã thắng nửa trận chiến.",
-        "Ai học được nghệ thuật buông xả là người giàu có nhất.",
-        "Sự thật không sợ ánh sáng – hãy chiếu ánh sáng tỉnh thức vào mọi ngóc ngách tâm mình.",
-        "Giữ giới không phải để được khen, mà để giữ tâm khỏi xáo động.",
-        "Sống đơn giản không phải vì nghèo vật chất mà giàu nội tâm.",
-        "Không dính mắc là chìa khóa mở mọi xiềng xích.",
-        "Người tự do thật sự không bị trói bởi tham, sân, si.",
-        "Tham là lửa thiêu rụi phước đức, sân là thuốc độc giết niềm vui.",
-        "Hãy nhìn tâm sân như rắn độc – đừng nuôi nó trong lòng.",
-        "Mỗi ý nghĩ thiện là một hạt giống phước.",
-        "Hãy chọn gieo hạt thiện lành ngay trong ý nghĩ.",
-        "Quan sát thân như vô thường – nó không phải là Ta.",
-        "Giữ tâm vững như núi, mặc cho gió khen chê thổi qua.",
-        "Chớ để tham dục biến mình thành nô lệ của nó.",
-        "Ai chiến thắng chính mình mới thật là người mạnh.",
-        "Khi con thấy phiền não trỗi lên, hãy mỉm cười quan sát nó.",
-        "Đừng chống lại vọng tưởng – hãy nhìn nó đến và đi như mây bay.",
-        "Tỉnh thức là nhớ mình đang nghĩ gì, nói gì, làm gì.",
-        "Thực hành tỉnh thức trong mọi tư thế: đi, đứng, nằm, ngồi.",
-        "Làm gì cũng làm với toàn tâm – đó là thiền động.",
-        "Sống trọn vẹn trong hiện tại – quá khứ đã qua, tương lai chưa đến.",
-        "Đừng để chuyện cũ trói tâm, cũng đừng để ảo vọng lôi kéo.",
-        "Quán vô ngã để diệt mầm kiêu mạn.",
-        "Thấy ai sai, hãy nghĩ: “Ta cũng từng như vậy.”",
-        "Mỗi lần nổi giận, tự hỏi: “Giận để làm gì? Giận có đáng không?”",
-        "Hãy chậm lại một nhịp trước khi nói, để lời nói không thành mũi dao.",
-        "Niệm thiện sẽ kéo tâm lên cao, niệm ác sẽ dìm tâm xuống thấp.",
-        "Thấy lỗi người hãy học để tránh, đừng để tâm khởi ghét.",
-        "Tha thứ không phải buông tha cho người khác, mà là giải phóng chính mình.",
-        "Hãy học nghệ thuật buông bỏ – vì nắm chặt chỉ làm tay đau.",
-        "Trí tuệ là ngọn đèn soi đường, từ bi là đôi chân dẫn bước.",
-        "Người tu là người luôn giữ ý thức sáng tỏ.",
-        "Hãy giữ tâm an như mặt hồ lặng gió.",
-        "Khi con hiểu vô thường, con sẽ trân quý những gì đang có.",
-        "Đừng tìm an lạc bên ngoài – an lạc chỉ nở hoa từ bên trong.",
-        "Mọi oán hận chỉ là ngọn lửa tự thiêu đốt lòng mình.",
-        "Tỉnh thức là nhận biết từng cảm xúc mà không bị chi phối.",
-        "Hãy nhớ: suy nghĩ chỉ là khách qua đường – đừng nhận nó làm chủ.",
-        "Chớ để tâm chạy theo những gì thay đổi – hãy an trụ vào Tánh Biết.",
-        "Giới, Định, Tuệ – ba cột trụ vững chắc cho người tu.",
-        "Giữ giới để tâm yên, tu định để vọng lặng, phát tuệ để thấy rõ.",
-        "Chớ lẫn lộn giữa mong muốn và nhu cầu thật.",
-        "Hãy nuôi dưỡng niềm biết ơn như suối nguồn trong mát.",
-        "Khi lòng con mềm, lời con ấm, mắt con sáng.",
-        "Hãy học nói lời chân thật mà dịu dàng.",
-        "Đừng sợ cô đơn – đó là cơ hội gặp lại chính mình.",
-        "Ai đủ yên để lắng nghe chính mình mới đủ lặng để nghe người.",
-        "Hãy tự soi gương lòng trước khi soi người khác.",
-        "Giữ được tĩnh lặng trong lòng là giữ được chìa khóa mở mọi cánh cửa.",
-        "Tỉnh thức là nhìn mọi việc như chúng là, không thêm bớt bởi thành kiến.",
-        "Hãy sống sao để mỗi đêm nằm xuống lòng không ray rứt.",
-        "Hãy tập cười với khó khăn – nó sẽ bớt nghiêm trọng.",
-        "Đừng để lời khen làm mờ mắt, đừng để lời chê làm mờ lòng.",
-        "Người tu tốt là người ngày càng khiêm nhường và bao dung.",
-        "Hãy chấp nhận người khác khác mình để lòng rộng như trời.",
-        "Đừng ép hoa nở khi chưa đến mùa – hãy kiên nhẫn với tiến trình của chính mình.",
-        "Quay về hơi thở là trở về nhà của chính mình.",
-        "Biết dừng đúng lúc mới khỏi trượt dài trong sai lầm.",
-        "Ai giữ tâm bình an, người đó mạnh nhất.",
-        "Mỗi câu nói nên như hạt giống gieo yêu thương.",
-        "Hãy học lắng nghe bằng trái tim, không chỉ đôi tai.",
-        "Người an nhiên là người biết đủ.",
-        "Không cần thắng ai – chỉ cần thắng chính mình.",
-        "Hãy thắp đèn trí tuệ để soi sáng đường mình đi.",
-        "Tâm an là gốc của mọi hạnh phúc.",
-        "Hãy đi chậm để thấy vẻ đẹp đang bị bỏ lỡ.",
-        "Đừng mong dễ dàng – hãy mong mình kiên cường.",
-        "Hãy sống như cánh sen: giữa bùn vẫn giữ hương thanh khiết.",
-        "Làm được việc nhỏ với tâm lớn còn hơn làm việc lớn với tâm nhỏ.",
-        "Thấy rõ sự thật không phải để đau lòng, mà để biết cách sống thật hơn.",
-        "Hãy để lòng rộng như biển – đón nhận cả sóng dữ mà vẫn bình yên.",
-        "Tu hành không phải để tránh đời mà để sống giữa đời không bị đời cuốn đi.",
-        "Giữ được tâm trong mọi hoàn cảnh là thành tựu lớn nhất.",
-        "Thức tỉnh không phải thay đổi thế giới mà là thay đổi cách mình nhìn thế giới.",
-        "Tỉnh thức là sống mà không bị quá khứ ràng buộc, không bị tương lai mê hoặc.",
-        "Hãy hỏi mỗi ngày: “Hôm nay ta đã sống trọn vẹn chưa?”",
-        "Khi lòng không còn mong cầu, hạnh phúc đến rất nhẹ nhàng.",
-        "Hãy sống như ánh nắng – âm thầm sưởi ấm không đòi hỏi hồi đáp.",
-        "Chớ biến đạo thành lời nói suông – hãy biến nó thành hơi thở và bước đi.",
-        "Ai biết mình đang đi đâu sẽ không bị lạc dù đường quanh co.",
-        "Người có tuệ thấy sai mà tránh, thấy đúng mà làm.",
-        "Giữ được tâm bình thường là kỳ công lớn nhất.",
-        "Hãy luyện tập nhìn sâu vào bản chất thay vì dừng ở bề ngoài.",
-        "Một niệm thiện cứu muôn kiếp, một niệm ác đọa muôn đời.",
-        "Hãy chọn gieo phúc mỗi ngày – vì nghiệp cũng bắt đầu từ hạt nhỏ.",
-        "Người thật tu là người vẫn cười khi bị thử thách.",
-        "Tâm sáng tựa đèn, hành vi như gương – hãy giữ cho sạch.",
-        "Hãy tập nhìn mọi thứ như lần đầu để luôn tươi mới và chân thành.",
-        "Ai hiểu vô thường sẽ biết trân trọng những điều giản dị.",
-        "Người tỉnh thức biết ơn cả nghịch cảnh vì nó mài giũa mình.",
-        "Hãy chọn sống như nước – mềm mại nhưng mạnh mẽ.",
-        "Đừng tìm con đường dễ – hãy tìm con đường đúng.",
-        "Hãy để trái tim mình rộng lớn hơn mọi nỗi sợ.",
-        "Sống thật với lòng – đó là nền tảng của mọi tu hành.",
-        "Khi tâm không còn phân biệt, hạnh phúc sẽ không còn giới hạn.",
-        "Hãy tự hỏi: “Điều ta đang làm có xứng đáng với thời gian của một đời người không?”",
-        "Mỗi hơi thở là cơ hội để làm mới chính mình.",
-        "Hãy sống như ngọn gió – tự do và mát lành cho mọi người.",
-        "Hãy tu sao cho lời nói trở thành hạt giống an vui, không là mũi tên làm đau lòng người.",
-        "Khi vọng tưởng nổi lên, đừng đánh nhau với nó – chỉ mỉm cười mà quan sát.",
-        "Mỗi cơn giận là ngọn lửa, hãy tưới mát nó bằng hiểu và thương.",
-        "Tâm con lắng xuống thì sự thật tự hiện lên, không cần tìm kiếm xa xôi.",
-        "Giữ giới như xây đê ngăn lũ – để tham sân si không tràn ngập cánh đồng tâm.",
-        "Đừng chỉ tụng kinh ngoài miệng – hãy khắc giới luật trong lòng.",
-        "Tĩnh lặng không phải không nghĩ gì, mà là không bị lôi đi bởi ý nghĩ.",
-        "Biết đủ thì tâm an, biết nhẫn thì lòng yên, biết buông thì đời nhẹ.",
-        "Khi người khác nổi giận, con hãy giữ lòng mát như suối.",
-        "Đừng tô vẽ hình ảnh đạo đức – hãy âm thầm sống thiện từ gốc rễ.",
-        "Khi đau khổ, đừng hỏi “Tại sao ta?” – hãy hỏi “Ta học gì từ đây?”",
-        "Buông bỏ không có nghĩa là mất – mà là mở tay để nhận được nhiều hơn.",
-        "Khi tranh hơn thua, cả hai đều mất – chỉ từ bi mới thắng được tất cả.",
-        "Đời vốn như mộng – đừng chấp mộng làm thật.",
-        "Ai lắng nghe được chính mình mới đủ sâu để lắng nghe người.",
-        "Nếu con muốn tâm bình, hãy dọn rác hờn giận mỗi ngày.",
-        "Đừng chờ đến mai mới làm điều tốt – mai có thể không đến.",
-        "Người tu hành thật không sợ bị ghét, chỉ sợ tâm mình hẹp hòi.",
-        "Giữ tâm như mặt hồ phẳng – để trăng chân lý in rõ không vỡ.",
-        "Hãy làm chủ thân, khẩu, ý – ba cánh cửa dẫn vào tâm giới.",
-        "Giữ giới để giữ lòng, giữ lòng để giữ đạo.",
-        "Một người biết quán chiếu thân vô thường sẽ không còn kiêu mạn.",
-        "Ai xem nhẹ được lời khen chê mới có tự do thật sự.",
-        "Tâm vắng lặng là gương soi chiếu thật và giả.",
-        "Không cần nói nhiều về đạo – chỉ cần sống để người khác thấy đạo qua mình.",
-        "Khi con làm việc thiện, đừng rao khắp nơi – phước sẽ tự đến như hương hoa lan tỏa.",
-        "Người chín chắn không hứa hão, không nặng lời, không vội kết tội.",
-        "Mỗi sáng thức dậy, hãy nhắc lòng: “Hôm nay ta sẽ sống tỉnh thức.”",
-        "Khi ăn, hãy biết mình đang ăn – đó cũng là thiền.",
-        "Khi thở, hãy biết mình đang thở – đó cũng là thiền.",
-        "Khi bước, hãy đặt chân vào hiện tại – đó cũng là thiền.",
-        "Đừng biến đạo thành lời rao bán – hãy làm nó thành lối sống.",
-        "Ai sống chân thật sẽ ít sợ hãi.",
-        "Cầu nguyện không chỉ bằng miệng mà bằng cả đời sống.",
-        "Đừng ép người thay đổi – hãy gieo hạt hiểu và chờ mùa chín.",
-        "Biết sợ nhân quả sẽ biết sống cẩn trọng.",
-        "Kẻ cắp danh dự người khác cũng như kẻ cắp của.",
-        "Người biết mình dở mới mong học, người tự khen mình hay sẽ ngừng tiến.",
-        "Hãy chọn làm việc đúng, dù không ai thấy.",
-        "Càng tu sâu, lời nói càng giản dị.",
-        "Càng tu nhiều, ánh mắt càng hiền.",
-        "Ai hay trách người là quên soi mình.",
-        "Hãy cho người khác cơ hội để sửa sai, như mình muốn được vậy.",
-        "Đừng dùng lời ác đáp lại lời ác – hãy làm như nước dập tắt lửa.",
-        "Người tu mà hay chê bai là chưa thấy hết bóng tối trong lòng mình.",
-        "Khi thấy ai lầm lỗi, hãy khởi tâm thương hơn là khinh.",
-        "Một niệm thiện có thể cứu một kiếp khổ.",
-        "Hãy là người gieo hy vọng nơi đất cằn.",
-        "Tâm hiền như đất, ai gieo gì cũng mọc nhưng chỉ cho quả lành.",
-        "Hãy để ánh mắt mình ấm như nắng sớm.",
-        "Đừng sống chỉ để tồn tại – hãy sống để khai mở.",
-        "Không có người hoàn hảo – chỉ có người thật tâm tu sửa.",
-        "Hãy nhẹ lời như sương mai – mát lòng mà không ướt áo.",
-        "Ai giữ được bình tĩnh trong giông bão là đã thắng hơn nửa đời người.",
-        "Khi con không mong cầu, mọi thứ đều đủ.",
-        "Hãy luyện cho lòng như biển – nhận sông suối đủ loại mà vẫn mặn mà nguyên chất.",
-        "Buông xả là tặng quà cho chính mình.",
-        "Nếu con còn nóng giận, con vẫn còn làm nô lệ cho người khác.",
-        "Người làm chủ tâm mình thì làm chủ vận mệnh.",
-        "Đừng khoe mình tu giỏi – hãy tự hỏi: “Tâm đã bớt sân chưa?”",
-        "Người hay hứa mà không làm sẽ tự rút cạn uy tín.",
-        "Hãy làm điều đúng khi không ai nhìn, đó mới thật là thiện.",
-        "Nếu muốn người nghe, hãy nói với lòng chân thật.",
-        "Hãy nhớ: Học đạo không khó – sống theo đạo mới khó.",
-        "Chỉ khi tâm lặng mới thấy được trăng trí tuệ.",
-        "Ai chưa hiểu mình không nên dạy người.",
-        "Đừng dạy người tránh lửa nếu tay mình vẫn còn cháy.",
-        "Hãy chậm lại để không bỏ quên điều quan trọng nhất.",
-        "Người có tuệ biết khi nào nên nói, khi nào nên im.",
-        "Ai học được nhẫn nhịn sẽ tránh được trăm điều hối hận.",
-        "Khi tâm yên, cảnh cũng yên.",
-        "Hãy tập quán chiếu: “Ai rồi cũng già, cũng bệnh, cũng chết.”",
-        "Thấy vô thường thì hết tham đắm.",
-        "Đừng nói lời đạo lý khi lòng chưa chịu sống theo.",
-        "Ai giúp người không cần tiếng khen mới thật lòng thiện.",
-        "Đừng làm điều tốt để mua danh – hãy làm vì không thể không làm.",
-        "Chỉ khi tâm không còn chấp mới thấy tất cả đều là một.",
-        "Khi nghe người khác chỉ lỗi, đừng vội phản ứng – hãy lắng nghe.",
-        "Kẻ mạnh nhất là kẻ không bị khiêu khích.",
-        "Đừng nghĩ mình hơn người chỉ vì mình khác người.",
-        "Ai cũng là thầy, nếu con chịu học.",
-        "Đừng bỏ lỡ cơ hội làm lành – nó là hạt giống quý hiếm.",
-        "Hãy tập nhìn mọi thứ như mới để tránh thành kiến.",
-        "Người khiêm nhường tựa dòng sông – càng sâu càng lặng.",
-        "Khi tranh cãi, hãy tự hỏi: “Điều này có thật cần không?”",
-        "Hãy luyện tâm như thép – nóng cũng không cong, lạnh cũng không giòn.",
-        "Không làm chủ được miệng thì khó giữ được lòng.",
-        "Hãy nói ít để nghĩ nhiều, nghe nhiều để hiểu sâu.",
-        "Khi ai nói lời cay đắng, hãy tự nhủ: “Ta không cần uống thuốc độc này.”",
-        "Người biết tu sửa không ngại nhận lỗi.",
-        "Ai sẵn sàng cúi đầu mới nhìn rõ đường đi.",
-        "Đừng lãng phí lời nói cho người chưa muốn nghe.",
-        "Khi con tự soi mình đủ, mọi phán xét sẽ nhẹ đi.",
-        "Ai muốn sống an vui, hãy tập quên những điều làm khổ mình.",
-        "Đừng giữ hận – nó nặng hơn đá, nóng hơn lửa.",
-        "Tha thứ không làm yếu mềm – nó giải phóng tâm hồn.",
-        "Khi mắt con trong, thế giới tự sạch.",
-        "Hãy biến cuộc đời thành một bài thiền dài.",
-        "Sống đạo không chỉ trong chùa – mà trong chợ đời.",
-        "Thước đo tu hành không ở áo, ở lời – mà ở tâm hành.",
-        "Người thật tu càng ít phán xét.",
-        "Ai thật tỉnh thức sẽ thấy mọi thứ đang thay đổi.",
-        "Hãy sống sao để khi chết đi, không còn gì phải tiếc nuối.",
-        "Khi chấp nhận vô thường, con sẽ biết yêu thương hơn.",
-        "Hãy nhìn mọi người như những vị khách tạm thời trong đời mình.",
-        "Đừng giữ điều gì quá chặt – để khi mất đi, không bị xé lòng.",
-        "Người sống tỉnh thức không trốn tránh khổ đau – mà hiểu nó.",
-        "Ai giữ được nụ cười khi khó khăn là người tự do.",
-        "Tâm từ là ngôn ngữ mà ai cũng hiểu.",
-        "Khi con bình yên, con trở thành nơi trú ẩn cho người khác.",
-        "Hãy tập buông xả từng chút – đời sẽ nhẹ dần.",
-        "Đừng đợi giác ngộ sau này – hãy sống tỉnh thức ngay hôm nay.",
-        "Khi còn sống, hãy sống sao để chết cũng mỉm cười.",
-        "Đừng sợ thay đổi – chỉ sợ không chịu thay đổi.",
-        "Ai sống đơn giản thì lòng rộng rãi.",
-        "Người thương mình thật sự là người dám sửa mình.",
-        "Tỉnh thức là thấy rõ mà không bị lôi kéo.",
-        "Khi tu, đừng chỉ cầu phước – hãy cầu trí tuệ.",
-        "Mỗi ngày sống tỉnh thức là một ngày đáng sống.",
-        "Hãy đi về phía ánh sáng – ngay cả khi nó le lói.",
-        "Đừng mong đời dễ – hãy mong mình giỏi chịu đựng.",
-        "Hãy nhớ: Chỉ tâm an thì cảnh mới an.",
-        "Tâm từ là chìa khóa mở mọi cửa lòng.",
-        "Hãy để đời là con thuyền, tâm là dòng nước lặng.",
-        "Người an nhiên không oán trách gió, chỉ học cách buồm.",
-        "Sống tỉnh thức là món quà quý nhất con tự tặng cho mình.",
-        "Khi hiểu rõ vô thường, con sẽ biết quý trọng từng khoảnh khắc.",
-        "Người hay oán trách cuộc đời là người chưa hiểu mình.",
-        "Mỗi cơn sân si như lửa – hãy dập nó bằng nước từ bi.",
-        "Hãy học cách chấp nhận người khác như chính họ đang là.",
-        "Đừng trốn tránh nỗi khổ – hãy nhìn thẳng để hiểu và chuyển hóa.",
-        "Ai không sợ cô đơn mới thật sự tự do.",
-        "Khi tâm tĩnh lặng, trí tuệ như mặt hồ in trời.",
-        "Đừng để chuyện nhỏ biến thành mối hận lớn.",
-        "Hãy làm chủ cảm xúc trước khi nó làm chủ mình.",
-        "Khi thật lòng biết ơn, con sẽ thấy đời đủ đầy.",
-        "Người biết thương mình thật sự là người dám buông bỏ.",
-        "Khi con ngừng muốn thay đổi người khác, lòng con nhẹ tênh.",
-        "Hãy học nghệ thuật lắng nghe – nghe để hiểu, không phải để đáp trả.",
-        "Ai tu mà còn kiêu mạn là chưa thật sự bước vào đạo.",
-        "Thật dễ để đổ lỗi, nhưng chỉ có can đảm mới nhận lỗi.",
-        "Hãy tu sửa từng ý nghĩ – vì hành động bắt đầu từ đó.",
-        "Người bình tĩnh không phải người không sợ hãi, mà là người vượt qua nó.",
-        "Ai tha thứ được nhiều là người hiểu được nhiều.",
-        "Buông xả không phải bỏ cuộc – mà là buông những gì không còn cần thiết.",
-        "Sống tỉnh thức là nhận ra bản ngã đang lén lút chỉ huy.",
-        "Mỗi hơi thở chánh niệm là một bước về nhà.",
-        "Đừng để vết thương cũ điều khiển cách ta yêu thương.",
-        "Khi con thật sự lắng nghe người khác, đó là một món quà vô giá.",
-        "Hãy giữ trái tim mềm mại ngay cả khi đời khắc nghiệt.",
-        "Ai chịu khó quán chiếu nỗi khổ của mình sẽ dễ thương hơn.",
-        "Người biết điểm dừng sẽ tránh được vực sâu.",
-        "Khi bị phê bình, hãy xem đó là gương soi tâm.",
-        "Tâm hiền lành là bảo vật vô giá mà ai cũng cần.",
-        "Chớ biến đạo thành tranh luận – hãy biến nó thành hành động.",
-        "Khi con thấy mình hơn người – đó là lúc cần quán chiếu nhất.",
-        "Sống tỉnh thức là nhớ mình đang ở đâu, đang làm gì và vì sao.",
-        "Đừng để bản ngã tô vẽ thành kiến trên mọi việc.",
-        "Ai cũng có nỗi khổ riêng – đừng vội trách móc.",
-        "Khi con hiểu người khác khó khăn thế nào để sống tử tế, con sẽ bớt nghiêm khắc.",
-        "Hãy chọn làm người hòa giải hơn là châm thêm lửa.",
-        "Người tu không phải là người không đau khổ – mà là người biết chuyển hóa nó.",
-        "Đừng để đau buồn hôm nay phá hủy niềm tin vào ngày mai.",
-        "Tha thứ không đổi quá khứ – nhưng thay đổi được tương lai.",
-        "Hãy sống như cánh chim – nhẹ tênh dù bão gió.",
-        "Khi ai làm con tổn thương, hãy nhớ: họ cũng đang đau.",
-        "Người trí tuệ chọn im lặng đúng lúc, nói đúng lúc.",
-        "Hãy học từ sự im lặng của núi và sự chảy trôi của sông.",
-        "Ai thực hành được nhẫn nhịn sẽ ít hối tiếc về sau.",
-        "Đừng so sánh đường tu của mình với người khác.",
-        "Mỗi người có con đường riêng – hãy tôn trọng.",
-        "Hãy để nỗi buồn làm đất cho hạt giống hiểu biết nảy mầm.",
-        "Ai tu mà còn chia phe, chê bai là chưa hiểu tâm Phật.",
-        "Chân thật với mình trước khi đòi người khác thật lòng.",
-        "Khi con ngừng mong cầu quá mức, con mới biết thế nào là đủ.",
-        "Tỉnh thức là nhớ quay về mỗi khi lạc lối.",
-        "Đừng để thói quen cũ dẫn con vào vết xe đổ.",
-        "Một ánh nhìn ấm áp có thể thay đổi một ngày u ám.",
-        "Hãy làm người mà người khác thấy an lòng khi ở gần.",
-        "Ai cũng sợ bị tổn thương – hãy nói lời nhẹ nhàng.",
-        "Khi con thấy mọi thứ thay đổi, đừng sợ – đó là bản chất của đời.",
-        "Sống đạo là giữ tâm bình trong cảnh động.",
-        "Ai nắm giữ được tâm, người ấy nắm được đời mình.",
-        "Đừng che đậy lỗi lầm – hãy soi sáng để sửa.",
-        "Người tu thật không cần ai công nhận – chỉ cần tâm biết.",
-        "Hãy đặt câu hỏi với bản ngã mỗi khi nó đòi hỏi.",
-        "Khi con chấp nhận chính mình, con dễ dàng chấp nhận người.",
-        "Đừng chỉ học chữ nghĩa – hãy học chuyển hóa.",
-        "Khi muốn nói, hãy hỏi: “Điều này có cần thiết không?”",
-        "Khi lòng an nhiên, mọi thứ đều dễ giải quyết.",
-        "Tâm như nước – trong thì soi, đục thì che mờ.",
-        "Đừng gom quá khứ làm gánh nặng – hãy để nó làm bài học.",
-        "Ai kiên nhẫn với người khác sẽ học được yêu thương thật sự.",
-        "Hãy nuôi dưỡng ước mơ, nhưng đừng bị nó trói buộc.",
-        "Đời có khổ có vui – ai hiểu khổ sẽ trân trọng vui.",
-        "Sống như người lữ khách – nhẹ hành trang, vui bước đi.",
-        "Người biết tự soi mình sẽ ít trách người.",
-        "Hãy xem mỗi người gặp trên đường là một vị thầy dạy mình điều gì đó.",
-        "Ai cũng đang học cách sống – hãy nhẹ tay phê bình.",
-        "Khi tu, đừng cầu được lòng người – hãy cầu giữ vững lòng mình.",
-        "Người biết tự chủ là người thật tự do.",
-        "Hãy làm gương sáng trước khi làm người giảng đạo.",
-        "Đừng chỉ nói đạo lý – hãy là hiện thân của đạo lý.",
-        "Khi con ngã, hãy mỉm cười đứng dậy.",
-        "Ai còn sợ mất thì chưa thật sự buông.",
-        "Hãy lắng nghe như chưa từng nghe – để thật sự hiểu.",
-        "Khi con nhìn người với lòng từ, hình bóng họ sẽ hiền hơn trong mắt con.",
-        "Ai giúp người không tính toán sẽ thấy lòng mình rộng lớn.",
-        "Đừng nuôi ý nghĩ hại người – nó là thuốc độc cho chính mình.",
-        "Khi con thật lòng cầu nguyện, hãy sống như lời cầu ấy đã thành.",
-        "Hãy chọn làm người chữa lành hơn là người khơi đau.",
-        "Mỗi ngày sống tốt là một ngày tu hành.",
-        "Người thật giàu là người có trái tim đầy đủ.",
-        "Khi con đủ khiêm nhường, con học được mọi thứ.",
-        "Tâm hẹp thì thấy mọi thứ chật chội – tâm rộng thì thế giới bao la.",
-        "Đừng quên mỉm cười – nó là ánh sáng của linh hồn.",
-        "Khi con không còn phân biệt ta và người, đó là bắt đầu của thương yêu.",
-        "Người thật tu biết im lặng khi lời nói vô ích.",
-        "Ai khéo nuôi dưỡng tâm lành sẽ trổ quả an vui.",
-        "Hãy để đời dạy con kiên nhẫn, lòng dạy con yêu thương.",
-        "Mỗi lỗi lầm là một hạt giống của hiểu biết nếu con biết quán chiếu.",
-        "Khi tha thứ, con cho người khác tự do và tự mở khóa lòng mình.",
-        "Ai thật sự nghe người khác không chỉ nghe lời mà nghe cả nỗi lòng.",
-        "Đừng tìm Phật trên núi cao – hãy tìm nơi chính hơi thở.",
-        "Khi con biết dừng đúng lúc, con sẽ thấy đường an toàn nhất.",
-        "Người biết đủ sẽ không làm khổ ai để thỏa mãn mình.",
-        "Hãy cười với lỗi lầm cũ – vì nó đã dạy con lớn.",
-        "Đừng biến sự hiểu biết thành gông cùm người khác.",
-        "Hãy soi gương tâm mỗi ngày như soi mặt.",
-        "Khi lòng dịu lại, con mới thấy thương được người mình từng ghét.",
-        "Ai khéo dùng lời êm dịu sẽ xây cầu nối trái tim.",
-        "Đừng để đời biến mình thành đá – hãy giữ lòng như nước.",
-        "Khi con yên bên trong, ngoài kia hết ồn ào.",
-        "Ai còn xem thường người khác là chưa hiểu giá trị của mình.",
-        "Hãy để lời nói là món quà, không là vũ khí.",
-        "Mỗi ngày tỉnh thức là mỗi ngày gần đạo hơn.",
-        "Khi yêu thương thật sự, con không còn đòi hỏi.",
-        "Người bình thản trước khen chê là người vững nhất.",
-        "Đừng hứa điều không chắc – chữ tín là vốn quý nhất.",
-        "Khi con sống thật, không cần chứng minh.",
-        "Hãy để mọi thứ đến và đi như khách – chỉ giữ lại lòng an.",
-        "Người hiểu mình sẽ ít bị người khác lừa dối.",
-        "Ai đủ can đảm nhận lỗi là người đáng tin cậy.",
-        "Hãy quét dọn tâm như quét nhà – mỗi ngày, không đợi rác quá nhiều.",
-        "Khi con không còn dính mắc, con mới thật tự do.",
-        "Hãy gieo hạt giống an lạc trong từng lời nói.",
-        "Người biết chừa lỗi nhỏ sẽ tránh được họa lớn.",
-        "Đừng ép ai nghe lời mình – hãy sống sao để họ muốn học theo.",
-        "Hãy nhớ: Con không mang gì theo ngoài nghiệp và tâm.",
-        "Người tu thật là người làm cho người khác bớt khổ khi ở gần.",
-        "Hãy tập sống biết ơn Thượng Đế luôn hiện diện trong ta và ngoài ta.",
-        "Giữ tâm thiện lành, trong sạch, là cách làm sáng lên Thượng Đế trong lòng.",
-        "Hãy tu tâm, giữ giới, hành thiện – đó là con đường gần gũi Thượng Đế.",
-        "Khi yêu thương và giúp đỡ người khác, chính là phụ Thượng Đế làm công việc yêu thương.",
-        "Càng sống với lòng thương yêu và biết ơn, Thượng Đế trong ta càng hiện rõ ra ngoài.",
-        "Hãy hỏi Thượng Đế trong lòng tất cả điều mình muốn hỏi – và lắng nghe bằng tĩnh lặng.",
-        "Đừng quên Thượng Đế trong mọi việc – dù lớn hay nhỏ.",
-        "Hãy sống thật, ngay thẳng và trong sáng – đó là điều Thượng Đế muốn.",
-        "Biết ơn cả những điều không vừa ý – vì đó cũng là bài học Thượng Đế gửi đến.",
-        "Sống hiền lành, giữ giới, thương người, biết ơn đời – đó là cách gần Thượng Đế nhất.",
-        "Thượng Đế đã ban sự sống quý giá này cho mỗi người – hãy luôn biết ơn Ngài.",
-        "Thượng Đế không xa lạ – Ngài sống trong lòng ta và quanh ta.",
-        "Càng tu tập, giữ giới và thương yêu, ánh sáng Thượng Đế trong ta càng rực rỡ.",
-        "Hãy tin rằng Thượng Đế biết mọi điều trong lòng ta, cả điều chưa nói ra.",
-        "Khi con trò chuyện với Thượng Đế trong lòng, Ngài luôn lắng nghe.",
-        "Mối quan hệ với Thượng Đế được nuôi dưỡng bằng lòng chân thật và biết ơn.",
-        "Thượng Đế không phân biệt ai – Ngài thương tất cả như con một nhà.",
-        "Khi con biết ơn Thượng Đế, lòng con mở ra đón nhận yêu thương.",
-        "Thượng Đế luôn chờ con quay về – không bao giờ bỏ rơi.",
-        "Con không cần tìm Thượng Đế xa xôi – chỉ cần quay vào lòng mình.",
-        "Thượng Đế là nguồn ban cho ta sự sống quý giá này.",
-        "Ngài không chỉ ở trên trời cao mà luôn ở trong ta và gần gũi quanh ta.",
-        "Thượng Đế là khối tình thương yêu, ánh sáng, thông minh, chí thiện.",
-        "Ngài có đầy đủ toàn năng và toàn giác, biết tất cả, hiểu tất cả.",
-        "Thượng Đế là ánh sáng sáng soi và lòng thương yêu vô cùng tận.",
-        "Ngài luôn hiện diện ở mọi nơi, không bao giờ rời bỏ ta.",
-        "Bản chất Thượng Đế là yêu thương, soi sáng, thông suốt và thiện lành.",
-        "Hãy biết ơn Thượng Đế đã ban cho ta sự sống này để học hỏi và tu sửa.",
-        "Tin rằng Thượng Đế luôn gần gũi và ở sẵn trong mỗi người.",
-        "Hãy tập nhận ra Ngài đang hiện diện ngay trong lòng mình.",
-        "Tin rằng Thượng Đế biết hết mọi điều trong tâm ta, cả điều chưa nói ra.",
-        "Ngài luôn lắng nghe khi ta thành tâm hỏi và cầu nguyện.",
-        "Mối quan hệ với Thượng Đế cần được nuôi dưỡng bằng lòng biết ơn và thương yêu.",
-        "Khi giữ giới, tu tập và làm điều thiện lành, ta làm sáng lên phần Thượng Đế trong mình.",
-        "Thượng Đế không phân biệt ai, thương yêu tất cả như nhau.",
-        "Tin rằng Thượng Đế luôn chờ đón ta quay về, không bỏ rơi ai.",
-        "Hãy tập sống luôn biết ơn Thượng Đế đang hiện diện trong ta và ngoài ta.",
-        "Càng tu hành, giữ giới, càng làm sáng Thượng Đế trong lòng mình.",
-        "Sống thương yêu và biết ơn nhiều thì Thượng Đế trong ta càng hiện rõ ra ngoài.",
-        "Hãy hỏi Thượng Đế trong lòng tất cả điều mình muốn hỏi và lắng nghe trong im lặng.",
-        "Giữ tâm thiện lành, ngay thẳng và trong sạch để gần Thượng Đế hơn.",
-        "Sống hiền lành, thương người, giữ giới và giúp đời là phụ Thượng Đế làm công việc yêu thương.",
-        "Nhớ rằng mỗi việc làm thiện là một cách tỏ lòng biết ơn Thượng Đế.",
-        "Tập nhận biết Ngài đang có mặt trong hơi thở, trong tâm và trong mọi điều quanh mình.",
-        "Hãy luôn sống thật và trọn vẹn với tình thương, vì đó là ánh sáng Thượng Đế soi chiếu ra ngoài.",
-        "Khi quán chiếu lỗi mình và sửa đổi, đó là đang làm sáng phần Thượng Đế trong mình.",
-        "Tu là sửa mình chứ không sửa người.",
-        "Nhìn lỗi mình để sửa, thấy lỗi người để học.",
-        "Không bao giờ tự cho mình hay hơn người khác.",
-        "Sai thì nhận và sửa ngay, không đổ thừa hoàn cảnh.",
-        "Thấy sai sửa liền, đừng để kéo dài thành thói quen.",
-        "Không làm khổ mình, khổ người và khổ chúng sinh.",
-        "Không sát sanh, không hại người hại vật.",
-        "Không trộm cắp, lường gạt, vay không trả.",
-        "Không tà dâm, không phá hoại gia đình người.",
-        "Không nói dối, không nói lời hai lưỡi.",
-        "Không nói lời ác, không chửi rủa.",
-        "Không nói thêu dệt, nói vô ích.",
-        "Không nghiện ngập, say sưa, hút chích.",
-        "Không mê tín, tin bậy, tà pháp.",
-        "Không xem bói toán, chọn ngày giờ mê tín.",
-        "Không tin hướng nào xấu, tuổi nào xung.",
-        "Không tin thầy tà, pháp tà chia rẽ người.",
-        "Tin nhân quả, thiện ác báo ứng.",
-        "Tin Thượng Đế là nguồn ban sự sống.",
-        "Tin Thượng Đế không chỉ trên trời mà trong ta, gần ta.",
-        "Tin Thượng Đế là tình thương yêu, ánh sáng, thông minh, chí thiện.",
-        "Tin Thượng Đế toàn năng, toàn giác, thông suốt.",
-        "Tin Thượng Đế ở trong ta, tu càng sáng Thượng Đế trong ta càng sáng.",
-        "Hỏi Thượng Đế trong lòng mọi điều mình muốn hỏi.",
-        "Sống biết ơn Thượng Đế luôn hiện diện trong và ngoài ta.",
-        "Càng thương yêu và biết ơn nhiều, Thượng Đế trong ta càng hiện rõ.",
-        "Giữ giới để tâm an, thân khỏe, trí sáng.",
-        "Ăn uống trong chánh niệm, biết ơn thực phẩm.",
-        "Biết ơn người nấu, người làm ra thức ăn.",
-        "Ăn uống đúng giờ, điều độ, không tham lam.",
-        "Không lãng phí thức ăn, không chê bai.",
-        "Không ăn uống xa hoa, phí phạm.",
-        "Không uống rượu bia, chất say hại thân.",
-        "Không nói chuyện vô ích trong bữa ăn.",
-        "Ăn chậm, nhai kỹ, nuốt an.",
-        "Thương yêu cha mẹ, ông bà, tổ tiên.",
-        "Hiếu thảo, phụng dưỡng cha mẹ lúc bệnh già.",
-        "Không làm cha mẹ buồn phiền, lo lắng.",
-        "Tôn trọng anh chị em, đoàn kết gia đình.",
-        "Thương yêu vợ chồng, chung thủy, không phản bội.",
-        "Chăm sóc, dạy dỗ con cái đạo đức.",
-        "Giữ gìn hạnh phúc gia đình.",
-        "Tôn trọng, giúp đỡ bà con, lối xóm.",
-        "Tôn kính Tam Bảo.",
-        "Không phê bình, chia rẽ các tôn giáo.",
-        "Không tranh luận đạo nào hơn.",
-        "Biết ơn chư Phật, Thánh hiền, Tổ tiên.",
-        "Không chê bai kinh sách, pháp môn.",
-        "Không so đo công đức mình với người.",
-        "Không khoe khoang việc thiện mình làm.",
-        "Làm việc thiện âm thầm, khiêm hạ.",
-        "Giúp đỡ người hoạn nạn, khổ đau.",
-        "Thăm viếng người bệnh, an ủi.",
-        "Chia sẻ thức ăn, vật dụng với người cần.",
-        "Không bỏ rơi người già yếu, neo đơn.",
-        "Không tham lam, ích kỷ.",
-        "Không ganh tỵ, đố kỵ.",
-        "Không nóng giận, thù hận.",
-        "Không oán trách, đổ lỗi.",
-        "Không thù dai, nuôi hận.",
-        "Không lừa dối, hại người.",
-        "Không khinh người nghèo hèn.",
-        "Không tự cao, kiêu ngạo.",
-        "Không xem thường ai.",
-        "Không gây chia rẽ, bè phái.",
-        "Không xúi giục người làm ác.",
-        "Không theo bạn xấu, bè xấu.",
-        "Không cờ bạc, đỏ đen.",
-        "Không phá hoại tài sản công cộng.",
-        "Không phung phí tiền bạc.",
-        "Không ỷ quyền thế hiếp đáp người.",
-        "Không nói xấu sau lưng.",
-        "Không phán xét, chỉ trích vô cớ.",
-        "Không mắng chửi người già trẻ.",
-        "Không chọc ghẹo, xúc phạm người khác.",
-        "Không gây ồn ào, mất trật tự.",
-        "Không xâm hại môi trường sống.",
-        "Sống đúng pháp luật, lệ làng, phong tục tốt đẹp.",
-        "Tôn trọng đất nước, luật pháp.",
-        "Tôn trọng phong tục, tín ngưỡng tốt.",
-        "Nhập gia tùy tục, không gây chia rẽ."
-      ];
-      const quoteEl = document.getElementById("quote");
-      const quoteSound = document.getElementById("quoteSound");
-      
-      if (!quoteEl) return;
+        function showQuote(index) {
+            // Áp dụng hiệu ứng mờ đi
+            quoteDisplay.classList.remove('animate-bloom-in');
+            quoteDisplay.classList.add('animate-fade-out');
 
-      quoteEl.classList.add("light-flare");
-      let currentIndex = 0;
+            // Đợi hiệu ứng mờ kết thúc rồi mới đổi chữ
+            setTimeout(() => {
+                currentQuoteIndex = (index + quotes.length) % quotes.length;
+                // Sử dụng innerHTML để hiển thị thẻ <br> cho việc xuống dòng
+                quoteDisplay.innerHTML = quotes[currentQuoteIndex];
+                
+                // Áp dụng hiệu ứng "bung tỏa sáng"
+                quoteDisplay.classList.remove('animate-fade-out');
+                quoteDisplay.classList.add('animate-bloom-in');
+            }, 1000); // Đợi 1 giây cho hiệu ứng mờ
+        }
 
-      function showFlare() {
-        quoteEl.classList.add("flare-active");
-        setTimeout(() => quoteEl.classList.remove("flare-active"), 1500);
-      }
+        function startQuoteLoop() {
+            clearInterval(quoteInterval);
+            quoteInterval = setInterval(() => {
+                showQuote(currentQuoteIndex + 1);
+            }, 12000); // Tăng thời gian hiển thị lên 12 giây
+        }
 
-      function scheduleNextQuote() {
-        const currentQuote = quotes[currentIndex];
-        // Tính toán thời gian hiển thị dựa trên số từ của câu nói.
-        // Tốc độ đọc trung bình khoảng 150 từ/phút.
-        // Ta lấy 400ms/từ (tương đương 150 từ/phút) để có thời gian đọc thoải mái.
-        const words = currentQuote.split(/\s+/).filter(Boolean).length;
-        const timePerWord = 400; // 400 mili giây cho mỗi từ
-        const calculatedTime = Math.max(5000, words * timePerWord); // Thời gian hiển thị tối thiểu là 5 giây
+        // --- Logic vuốt ---
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const quoteContainer = document.getElementById('quote-container');
 
-        // Lên lịch cho lần thay đổi câu nói tiếp theo
-        setTimeout(changeQuote, calculatedTime);
-      }
+        quoteContainer.addEventListener('touchstart', (event) => {
+            touchStartX = event.changedTouches[0].screenX;
+        }, { passive: true });
 
-      function changeQuote() {
-        // Bắt đầu hiệu ứng mờ đi
-        quoteEl.classList.remove("fade-in");
-        quoteEl.classList.add("fade-out");
+        quoteContainer.addEventListener('touchend', (event) => {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        });
 
-        // Sau khi hiệu ứng mờ đi kết thúc (1 giây), thay đổi nội dung và cho hiện ra
-        setTimeout(() => {
-          currentIndex = (currentIndex + 1) % quotes.length;
-          quoteEl.textContent = '“' + quotes[currentIndex] + '”';
-          
-          // Bắt đầu hiệu ứng hiện ra
-          quoteEl.classList.remove("fade-out");
-          quoteEl.classList.add("fade-in");
-          
-          // Phát âm thanh và hiệu ứng ánh sáng
-          if (quoteSound) {
-            quoteSound.currentTime = 0;
-            quoteSound.play().catch(() => {});
-          }
-          showFlare();
+        function handleSwipe() {
+            const swipeThreshold = 50; // Cần vuốt ít nhất 50px
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Vuốt sang trái
+                showQuote(currentQuoteIndex + 1);
+                startQuoteLoop(); // Reset lại chu kỳ thời gian
+            } else if (touchEndX > touchStartX + swipeThreshold) {
+                // Vuốt sang phải
+                showQuote(currentQuoteIndex - 1);
+                startQuoteLoop(); // Reset lại chu kỳ thời gian
+            }
+        }
 
-          // Sau khi đã hiển thị câu nói mới, lên lịch cho câu nói tiếp theo
-          scheduleNextQuote();
-        }, 1000); // Thời gian 1000ms này phải khớp với transition-duration trong CSS (1s)
-      }
+        // --- Khởi tạo ---
+        // Hiển thị ngay dòng chữ đầu tiên với hiệu ứng bung tỏa
+        document.addEventListener('DOMContentLoaded', () => {
+            quoteDisplay.innerHTML = quotes[currentQuoteIndex];
+            quoteDisplay.classList.add('animate-bloom-in');
+            startQuoteLoop();
+        });
 
-      // --- BẮT ĐẦU VÒNG LẶP ---
-      // 1. Hiển thị câu nói đầu tiên ngay lập tức khi tải trang
-      quoteEl.textContent = '“' + quotes[currentIndex] + '”';
-      quoteEl.classList.add("fade-in");
-      showFlare();
-      
-      // 2. Lên lịch cho lần thay đổi đầu tiên dựa trên độ dài của câu nói đầu tiên
-      scheduleNextQuote();
+    </script>
 
-      // --- LOGIC CHO MENU XỔ XUỐNG ---
-      const dropdownBtn = document.getElementById('social-dropdown-btn');
-      const dropdownMenu = document.getElementById('social-dropdown-menu');
-      const dropdownContainer = document.getElementById('social-dropdown-container');
-
-      if (dropdownBtn && dropdownMenu && dropdownContainer) {
-          dropdownBtn.addEventListener('click', (event) => {
-              event.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
-              dropdownMenu.classList.toggle('hidden');
-          });
-
-          // Đóng menu khi click ra ngoài
-          window.addEventListener('click', (event) => {
-              if (!dropdownContainer.contains(event.target)) {
-                  dropdownMenu.classList.add('hidden');
-              }
-          });
-      }
-    });
-  </script>
 </body>
 </html>
